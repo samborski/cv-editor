@@ -1,29 +1,59 @@
-/* Estilos del anterior style.css + nuevos */
+/* Estilos base para inputs y textareas (sin cambios significativos aquí) */
 .edit-input {
   width: 100%;
   padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Borde para tema claro */
   border-radius: 0.25rem;
   margin-bottom: 0.25rem;
-  background-color: white;
-  color: black;
+  background-color: white; 
+  color: black; 
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
-.edit-input.inline-block {
-    display: inline-block;
-    width: auto;
-}
-.edit-input.text-2xl { font-size: 1.5rem; line-height: 2rem; }
-.edit-input.font-bold { font-weight: 700; }
 
 .edit-textarea {
   width: 100%;
   padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Borde para tema claro */
   border-radius: 0.25rem;
   min-height: 80px;
-  background-color: white;
-  color: black;
+  background-color: white; 
+  color: black; 
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
+
+/* Ajuste de borde para tema oscuro (inputs normales, no en foco) */
+.dark .edit-input,
+.dark .edit-textarea {
+  border-color: #4a5568; /* Un gris más oscuro para el borde en tema oscuro (ej. gray-600 de Tailwind) */
+  background-color: #2d3748; /* Un fondo de input más oscuro (ej. gray-700 de Tailwind) */
+  color: #e2e8f0; /* Texto más claro para tema oscuro (ej. gray-200 de Tailwind) */
+}
+
+
+/* --- ESTILOS DE FOCO MEJORADOS PARA TEMA CLARO Y OSCURO --- */
+
+/* Foco para Tema Claro */
+html:not(.dark) .edit-input:focus,
+html:not(.dark) .edit-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #0077cc); /* Azul primario para borde en tema claro */
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.4); /* Resplandor azul semitransparente */
+}
+
+/* Foco para Tema Oscuro */
+html.dark .edit-input:focus,
+html.dark .edit-textarea:focus {
+  outline: none;
+  /* Usamos el color primario del tema oscuro definido en tu tailwind.config.js */
+  /* Tailwind genera esto como --dark-primary-color si tienes extend: { colors: { dark: { primary: '...' } } } */
+  /* Si no, usamos un valor explícito que contraste bien. */
+  border-color: var(--dark-primary-color, #60a5fa); /* Azul claro del tema oscuro */
+  /* Un resplandor que contraste con el fondo oscuro */
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5); /* Mismo color que el borde, pero con opacidad */
+  /* Alternativa: un color completamente diferente para el resplandor si se prefiere */
+  /* box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5); */ /* Ejemplo: un resplandor ámbar */
+}
+
 
 .delete-item-btn {
   margin-left: 8px;
