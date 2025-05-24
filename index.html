@@ -1,177 +1,618 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="light">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editor de CV Offline</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta name="description" content="Currículum de Daniel Gustavo Samborski" />
+    <meta
+      name="keywords"
+      content="currículum, Daniel Gustavo Samborski, desarrollador web, electricista"
+    />
+    <meta name="author" content="Daniel Gustavo Samborski" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="date" content="no" />
+    <meta name="url" content="no" />
+    <meta name="robots" content="index, follow" />
+    <title>Currículum de Daniel Gustavo Samborski</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#0077cc',
+              secondary: '#eaf2f8',
+              customText: '#333',
+              lightText: '#666',
+              customBg: '#f4f7fa',
+              dark: {
+                primary: '#60a5fa',
+                secondary: '#1f2937',
+                customText: '#e5e7eb',
+                lightText: '#9ca3af',
+                customBg: '#111827',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="print.css" />
+    <meta
+      property="og:title"
+      content="Currículum de Daniel Gustavo Samborski"
+    />
+    <meta
+      property="og:description"
+      content="Currículum de Daniel Gustavo Samborski - Desarrollador Web y Electricista"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://samborski.github.io/curriculum" />
+    <meta property="og:image" content="foto-de-perfil.jpg" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Currículum de Daniel Gustavo Samborski"
+    />
+    <meta
+      name="twitter:description"
+      content="Currículum de Daniel Gustavo Samborski - Desarrollador Web y Electricista"
+    />
+    <meta name="twitter:image" content="foto-de-perfil.jpg" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="foto-de-perfil-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="foto-de-perfil-16x16.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="foto-de-perfil-180x180.png"
+    />
+    <style>
+      /* Basic styling for input fields in edit mode */
+      .edit-input {
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        margin-bottom: 0.25rem;
+        background-color: white;
+        color: black;
+      }
+      .edit-textarea {
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        min-height: 80px;
+        background-color: white;
+        color: black;
+      }
+      .delete-item-btn {
+        margin-left: 8px;
+        color: #ef4444; /* red-500 */
+        cursor: pointer;
+      }
+      .add-item-btn {
+        display: inline-block;
+        padding: 4px 8px;
+        margin-top: 8px;
+        background-color: #3b82f6; /* blue-500 */
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+      }
+      .add-item-btn:hover {
+        background-color: #2563eb; /* blue-600 */
+      }
+      [v-cloak] { display: none; }
+    </style>
   </head>
-  <body>
-    <div id="app" class="container">
-      <h1>Editor de Currículum Vitae</h1>
 
-      <div class="cv-section">
-        <h2>Información Personal</h2>
-        <label
-          >Nombre Completo:
-          <input type="text" v-model="cv.personal.nombre" @input="saveCV"
-        /></label>
-        <label
-          >Email:
-          <input type="email" v-model="cv.personal.email" @input="saveCV"
-        /></label>
-        <label
-          >Teléfono:
-          <input type="tel" v-model="cv.personal.telefono" @input="saveCV"
-        /></label>
-        <label
-          >Resumen / Perfil:
-          <textarea v-model="cv.personal.resumen" @input="saveCV"></textarea>
-        </label>
-      </div>
-
-      <!-- Educación -->
-      <div class="cv-section">
-        <h2>Educación</h2>
-        <div
-          v-for="(item, index) in cv.educacion"
-          :key="'edu-' + index"
-          class="cv-item"
-        >
-          <label
-            >Título/Certificación:
-            <input type="text" v-model="item.titulo" @input="saveCV"
-          /></label>
-          <label
-            >Institución:
-            <input type="text" v-model="item.institucion" @input="saveCV"
-          /></label>
-          <label
-            >Fechas (Ej: 2020 - 2024):
-            <input type="text" v-model="item.fechas" @input="saveCV"
-          /></label>
-          <button @click="removeEducacionItem(index)" class="btn-remove">
-            Eliminar
-          </button>
+  <body
+    class="bg-customBg dark:bg-dark-customBg text-customText dark:text-dark-customText font-sans print:text-[11px] print:!bg-white print:!text-black"
+  >
+    <div id="app" v-cloak
+      class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg print:shadow-none print:p-0 print:!bg-white print:!text-black print-container"
+    >
+      <div class="relative">
+        <div id="botones" class="absolute top-0 right-0 print:hidden">
+          <div class="flex gap-2">
+            <button
+              @click="toggleEditMode"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              :title="editMode ? 'Ver CV' : 'Editar CV'"
+            >
+              <i class="fa-solid" :class="editMode ? 'fa-eye' : 'fa-edit'"></i>
+            </button>
+             <button v-if="editMode"
+              @click="resetData"
+              class="p-2 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-700 rounded-full transition-colors"
+              title="Restaurar datos por defecto"
+            >
+              <i class="fa-solid fa-undo"></i>
+            </button>
+            <button
+              onclick="window.print()"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Imprimir Currículum"
+            >
+              <i class="fa-solid fa-print text-lg"></i>
+            </button>
+            <a
+              :href="cvData.pdfLink" 
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Descargar PDF"
+            >
+              <i class="fa-solid fa-download text-lg"></i>
+            </a>
+            <a
+              :href="cvData.vcfLink"
+              download
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Agregar a contactos"
+            >
+              <i class="fa-solid fa-address-card text-lg"></i>
+            </a>
+            <button
+              @click="toggleDarkMode"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Cambiar tema claro/oscuro"
+            >
+              <i class="fa-solid fa-circle-half-stroke text-lg"></i>
+            </button>
+          </div>
         </div>
-        <button @click="addEducacionItem" class="btn-add">
-          Añadir Educación
-        </button>
-      </div>
-
-      <!-- Experiencia Laboral -->
-      <div class="cv-section">
-        <h2>Experiencia Laboral</h2>
-        <div
-          v-for="(item, index) in cv.experiencia"
-          :key="'exp-' + index"
-          class="cv-item"
+        <header
+          class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white"
         >
-          <label
-            >Cargo/Puesto:
-            <input type="text" v-model="item.puesto" @input="saveCV"
-          /></label>
-          <label
-            >Empresa: <input type="text" v-model="item.empresa" @input="saveCV"
-          /></label>
-          <label
-            >Fechas (Ej: Ene 2021 - Dic 2023):
-            <input type="text" v-model="item.fechas" @input="saveCV"
-          /></label>
-          <label
-            >Descripción:
-            <textarea v-model="item.descripcion" @input="saveCV"></textarea>
-          </label>
-          <button @click="removeExperienciaItem(index)" class="btn-remove">
-            Eliminar
-          </button>
-        </div>
-        <button @click="addExperienciaItem" class="btn-add">
-          Añadir Experiencia
-        </button>
-      </div>
-
-      <!-- Habilidades / Software y Aplicaciones -->
-      <div class="cv-section">
-        <h2>Habilidades / Software y Aplicaciones</h2>
-        <div
-          v-for="(item, index) in cv.habilidades"
-          :key="'skill-' + index"
-          class="cv-item skill-item"
-        >
-          <input
-            type="text"
-            v-model="item.nombre"
-            @input="saveCV"
-            placeholder="Ej: JavaScript, Photoshop"
-          />
-          <button @click="removeHabilidadItem(index)" class="btn-remove-inline">
-            X
-          </button>
-        </div>
-        <button @click="addHabilidadItem" class="btn-add">
-          Añadir Habilidad
-        </button>
-      </div>
-
-      <!-- Otros Conocimientos -->
-      <div class="cv-section">
-        <h2>Otros Conocimientos</h2>
-        <div
-          v-for="(item, index) in cv.otrosConocimientos"
-          :key="'other-' + index"
-          class="cv-item skill-item"
-        >
-          <input
-            type="text"
-            v-model="item.nombre"
-            @input="saveCV"
-            placeholder="Ej: Electricidad domiciliaria"
-          />
-          <button
-            @click="removeOtroConocimientoItem(index)"
-            class="btn-remove-inline"
+          <div class="flex-shrink-0 mb-5 md:mb-0 print:mb-0 md:mr-5 print:mr-5">
+            <img
+              :src="cvData.profilePicture"
+              alt="Foto de perfil"
+              class="w-32 max-w-[150px] min-w-[80px] print:w-28 rounded-full object-cover border-2 border-primary print:!border-black shadow"
+            />
+             <input v-if="editMode" type="text" v-model="cvData.profilePicture" placeholder="URL de la foto de perfil" class="edit-input mt-2">
+          </div>
+          <div
+            class="flex-1 text-center md:text-left print:text-left space-y-2"
           >
-            X
-          </button>
+            <h1
+              class="text-primary dark:text-dark-primary text-2xl md:text-3xl font-bold print:!text-black print:!mb-2"
+            >
+              <span v-if="!editMode">{{ cvData.name }}</span>
+              <input v-else type="text" v-model="cvData.name" class="edit-input text-2xl md:text-3xl font-bold">
+            </h1>
+            <p class="print:!text-black">
+              <i
+                class="fa-solid fa-envelope text-lightText dark:text-dark-lightText mr-2 print:!text-black"
+              ></i>
+              <a
+                :href="'mailto:' + cvData.email"
+                class="text-primary dark:text-dark-primary hover:underline print:!text-black"
+                ><span v-if="!editMode">{{ cvData.email }}</span>
+                <input v-else type="email" v-model="cvData.email" class="edit-input inline-block w-auto">
+              </a
+              >
+              |
+              <i
+                class="fa-solid fa-phone text-lightText dark:text-dark-lightText mx-2 print:!text-black"
+              ></i>
+              <span v-if="!editMode">{{ cvData.phone }}</span>
+              <input v-else type="tel" v-model="cvData.phone" class="edit-input inline-block w-auto">
+              <a
+                :href="'https://api.whatsapp.com/send?phone=' + cvData.phone.replace(/\s+/g, '')"
+                target="_blank"
+                class="text-primary dark:text-dark-primary hover:text-green-500 dark:hover:text-green-400 ml-2 print:hidden"
+                title="Iniciar chat en WhatsApp"
+              >
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+            </p>
+            <p class="print:!text-black">
+              <i
+                class="fa-solid fa-globe text-lightText dark:text-dark-lightText mr-2 print:!text-black"
+              ></i>
+              <a
+                :href="cvData.websiteUrl"
+                target="_blank"
+                class="text-primary dark:text-dark-primary hover:underline print:!text-black"
+                ><span v-if="!editMode">{{ cvData.websiteDisplay }}</span>
+                <input v-else type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar (website)" class="edit-input inline-block w-auto mr-1">
+                <input v-if="editMode" type="url" v-model="cvData.websiteUrl" placeholder="URL del website" class="edit-input inline-block w-auto">
+              </a
+              >
+            </p>
+            <p class="print:!text-black">
+              <i
+                class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black"
+              ></i>
+              <span v-if="!editMode">{{ cvData.address }}</span>
+              <input v-else type="text" v-model="cvData.address" class="edit-input">
+            </p>
+            <p class="print:!text-black">
+              <i
+                class="fa-solid fa-cake-candles text-lightText dark:text-dark-lightText mr-2 print:!text-black"
+              ></i>
+              <span v-if="!editMode">{{ cvData.birthdate }}</span>
+              <input v-else type="text" v-model="cvData.birthdate" class="edit-input">
+            </p>
+          </div>
+        </header>
+      </div>
+      <main class="flex flex-col md:flex-row print:flex-row gap-6 print:gap-4">
+        <section
+          class="flex-[2] bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 print:p-2 print:border-0 print:!bg-white print:!text-black"
+        >
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black"
+          >
+            Perfil Profesional
+          </h2>
+          <p v-if="!editMode"
+            class="mb-6 text-customText dark:text-dark-customText print:!text-black"
+            v-html="cvData.professionalProfile.replace(/\n/g, '<br />')"
+          >
+          </p>
+          <textarea v-else v-model="cvData.professionalProfile" class="edit-textarea mb-6"></textarea>
+          
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
+          >
+            Educación
+          </h2>
+          <ul class="space-y-2 mb-6">
+            <li v-for="(item, index) in cvData.education" :key="'edu-' + index"
+              class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
+            >
+              <span v-if="!editMode" v-html="item"></span>
+              <template v-else>
+                <input type="text" v-model="cvData.education[index]" class="edit-input">
+                <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('education', index)"></i>
+              </template>
+            </li>
+            <li v-if="editMode">
+                <button @click="addItem('education')" class="add-item-btn">
+                    <i class="fa-solid fa-plus mr-1"></i> Añadir Educación
+                </button>
+            </li>
+          </ul>
+
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
+          >
+            Experiencia Laboral
+          </h2>
+          <ul class="space-y-2">
+            <li v-for="(item, index) in cvData.experience" :key="'exp-' + index"
+              class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
+            >
+              <span v-if="!editMode" v-html="item"></span>
+              <template v-else>
+                <input type="text" v-model="cvData.experience[index]" class="edit-input">
+                <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('experience', index)"></i>
+              </template>
+            </li>
+             <li v-if="editMode">
+                <button @click="addItem('experience')" class="add-item-btn">
+                    <i class="fa-solid fa-plus mr-1"></i> Añadir Experiencia
+                </button>
+            </li>
+          </ul>
+        </section>
+
+        <section
+          class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 print:p-2 print:border-0 print:!bg-white print:!text-black"
+        >
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black"
+          >
+            Habilidades Técnicas
+          </h2>
+          <ul class="space-y-4 mb-6">
+            <li v-for="(item, index) in cvData.technicalSkills" :key="'skill-' + index"
+              class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
+            >
+              <span v-if="!editMode" v-html="item"></span>
+              <template v-else>
+                <!-- Using textarea for skills as they can be longer and contain HTML (like <strong>) -->
+                <textarea v-model="cvData.technicalSkills[index]" class="edit-textarea" rows="2"></textarea>
+                <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('technicalSkills', index)"></i>
+              </template>
+            </li>
+            <li v-if="editMode">
+                <button @click="addItem('technicalSkills', '<strong>Nueva Categoría:</strong> Habilidades...')" class="add-item-btn">
+                    <i class="fa-solid fa-plus mr-1"></i> Añadir Habilidad
+                </button>
+            </li>
+          </ul>
+
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black"
+          >
+            Disponibilidad
+          </h2>
+          <p v-if="!editMode"
+            class="text-customText dark:text-dark-customText print:!text-black"
+          >
+            {{ cvData.availability }}
+          </p>
+          <input v-else type="text" v-model="cvData.availability" class="edit-input">
+        </section>
+      </main>
+
+      <!-- Envolver las secciones de compartir y redes sociales en un contenedor flex -->
+      <div class="w-full print:hidden mt-6 flex flex-col md:flex-row gap-6">
+        <!-- Sección Compartir Currículum -->
+        <div class="flex-1 text-center">
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
+          >
+            ¡Difunde mi Perfil!
+          </h2>
+          <div class="flex justify-center gap-4">
+            <a
+              :href="'https://www.facebook.com/sharer/sharer.php?u=' + encodedWebsiteUrl"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Compartir en Facebook"
+            >
+              <i class="fa-brands fa-facebook text-2xl"></i>
+            </a>
+            <a
+              :href="'https://x.com/intent/tweet?url=' + encodedWebsiteUrl + '&text=' + encodedShareText"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Compartir en X"
+            >
+              <i class="fa-brands fa-x-twitter text-2xl"></i>
+            </a>
+            <a
+              :href="'https://www.linkedin.com/shareArticle?mini=true&url=' + encodedWebsiteUrl + '&title=' + encodedShareTitle + '&summary=' + encodedShareSummary"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Compartir en LinkedIn"
+            >
+              <i class="fa-brands fa-linkedin text-2xl"></i>
+            </a>
+            <a
+              :href="'https://api.whatsapp.com/send?text=' + encodedShareText + ': ' + encodedWebsiteUrl"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Compartir por WhatsApp"
+            >
+              <i class="fa-brands fa-whatsapp text-2xl"></i>
+            </a>
+            <a
+              :href="'https://t.me/share/url?url=' + encodedWebsiteUrl + '&text=' + encodedShareText"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Compartir por Telegram"
+            >
+              <i class="fa-brands fa-telegram text-2xl"></i>
+            </a>
+          </div>
         </div>
-        <button @click="addOtroConocimientoItem" class="btn-add">
-          Añadir Conocimiento
-        </button>
-      </div>
 
-      <!-- Disponibilidad -->
-      <div class="cv-section">
-        <h2>Disponibilidad</h2>
-        <label>
-          <input
-            type="text"
-            v-model="cv.disponibilidad"
-            @input="saveCV"
-            placeholder="Ej: Tiempo completo, ingreso inmediato"
-          />
-        </label>
-      </div>
+        <!-- Sección Redes Sociales -->
+        <div class="flex-1 text-center">
+          <h2
+            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
+          >
+            ¡Conectemos!
+          </h2>
+          <div class="flex justify-center gap-4">
+            <a
+              :href="cvData.socialLinks.linkedin"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Perfil de LinkedIn"
+            >
+              <i class="fa-brands fa-linkedin text-2xl"></i>
+            </a>
+             <input v-if="editMode" type="url" v-model="cvData.socialLinks.linkedin" placeholder="LinkedIn URL" class="edit-input mt-1">
 
-      <div class="actions">
-        <button @click="exportCV" class="btn-action">Exportar CV (JSON)</button>
-        <label class="btn-action import-label">
-          Importar CV (JSON)
-          <input
-            type="file"
-            @change="importCV"
-            accept=".json"
-            style="display: none"
-          />
-        </label>
-        <button @click="clearCV" class="btn-action btn-danger">
-          Limpiar CV (¡Cuidado!)
-        </button>
+
+            <a
+              :href="cvData.socialLinks.github"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Perfil de GitHub"
+            >
+              <i class="fa-brands fa-github text-2xl"></i>
+            </a>
+            <input v-if="editMode" type="url" v-model="cvData.socialLinks.github" placeholder="GitHub URL" class="edit-input mt-1">
+
+            <a
+              :href="cvData.socialLinks.twitter"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Perfil de X"
+            >
+              <i class="fa-brands fa-x-twitter text-2xl"></i>
+            </a>
+            <input v-if="editMode" type="url" v-model="cvData.socialLinks.twitter" placeholder="X/Twitter URL" class="edit-input mt-1">
+
+            <a
+              :href="cvData.socialLinks.facebook"
+              target="_blank"
+              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
+              title="Perfil de Facebook"
+            >
+              <i class="fa-brands fa-facebook text-2xl"></i>
+            </a>
+             <input v-if="editMode" type="url" v-model="cvData.socialLinks.facebook" placeholder="Facebook URL" class="edit-input mt-1">
+          </div>
+           <div v-if="editMode" class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Modifique las URLs de sus redes sociales arriba.
+            </div>
+        </div>
       </div>
     </div>
 
-    <!-- Vue.js CDN (puedes descargarlo y enlazarlo localmente si prefieres total offline) -->
-    <script src="https://unpkg.com/vue@3"></script>
-    <script src="app.js"></script>
+    <!-- Vue.js CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script>
+      const defaultCvData = {
+        name: 'Daniel Gustavo Samborski',
+        email: 'danielgsamborski@gmail.com',
+        phone: '+54 3412294413',
+        websiteDisplay: 'samborski.github.io/curriculum',
+        websiteUrl: 'https://samborski.github.io/curriculum',
+        address: 'San Diego 1129, Villa Gob. Gálvez',
+        birthdate: '18 de enero de 1973',
+        profilePicture: 'foto-de-perfil.jpg', // Ensure this image is accessible
+        pdfLink: 'Currículum de Daniel Gustavo Samborski.pdf?v=20250503',
+        vcfLink: 'contact.vcf',
+        professionalProfile: `Técnico especializado en mantenimiento y reparación de PC, desarrollo de sitios web y electricidad domiciliaria.
+Amplia experiencia como trabajador autónomo en distintas áreas, brindando soluciones tecnológicas y eléctricas a clientes particulares y PyMEs.
+Comprometido con la calidad del servicio y con una gran capacidad de adaptación a distintas necesidades del mercado.`,
+        education: [
+          '<b>Auxiliar Mecánico de Motocicletas</b> (CIC - Centro de Capacitación)',
+          '<b>Montador Electricista Domiciliario</b> (Centro de Capacitación Laboral Nº 6619)',
+          '<b>Desarrollo de Sitios Web 2.0 con DRUPAL</b> (FAGDUT Instituto de Capacitación)',
+          '<b>Armado, Mantenimiento y Reparación de PC, Redes y WIFI</b> (FAGDUT Instituto de Capacitación)',
+          '<b>Desarrollo de Sitios Web con JAVA y .NET</b> (FAGDUT Instituto de Capacitación)',
+          '<b>Programación en BASIC</b> (Maxicomp Computación)',
+          '<b>Operador de Computadoras</b> (Maxicomp Computación)',
+        ],
+        experience: [
+          '<b>Freelance</b> - Paseador de perros',
+          '<b>CAR’s Racing</b> - Auxiliar Mecánico Automotriz',
+          '<b>Freelance</b> - Electricista Domiciliario: Instalaciones eléctricas y reparaciones en hogares y comercios',
+          '<b>Freelance</b> - Técnico en Computadoras: Reparación y mantenimiento de computadoras para particulares y PyMES',
+          '<b>Comerciante en Negocio Familiar</b> - Atención al cliente, reposición de productos y tareas de limpieza',
+          '<b>Freelance</b> - Trabajos de Medio Tiempo: Repartidor de volantes, cuidado de enfermos en hospitales, y otros servicios varios',
+        ],
+        technicalSkills: [
+          '<strong>Programación y Desarrollo Web:</strong> HTML, CSS, SASS, JavaScript, PHP, MySQL, WordPress, Drupal, Bootstrap, Markdown, Python, .NET, Java',
+          '<strong>Software y Aplicaciones:</strong> Microsoft Office, LibreOffice, Visual Studio Code, Eclipse, Thunderbird, Google Apps',
+          '<strong>Otros Conocimientos:</strong> Electricidad domiciliaria',
+        ],
+        availability: 'Tiempo completo, ingreso inmediato',
+        socialLinks: {
+          linkedin: 'https://www.linkedin.com/in/danielgsamborski',
+          github: 'https://github.com/samborski',
+          twitter: 'https://x.com/dgsamborski',
+          facebook: 'https://www.facebook.com/danielgsamborski',
+        }
+      };
+
+      const app = Vue.createApp({
+        data() {
+          return {
+            editMode: false,
+            cvData: JSON.parse(JSON.stringify(defaultCvData)) // Deep copy
+          };
+        },
+        computed: {
+            encodedWebsiteUrl() {
+                return encodeURIComponent(this.cvData.websiteUrl);
+            },
+            encodedShareText() {
+                return encodeURIComponent(`Currículum de ${this.cvData.name}`);
+            },
+            encodedShareTitle() {
+                return encodeURIComponent(`Currículum de ${this.cvData.name}`);
+            },
+            encodedShareSummary() {
+                return encodeURIComponent('Desarrollador Web y Electricista');
+            }
+        },
+        methods: {
+          toggleEditMode() {
+            this.editMode = !this.editMode;
+          },
+          saveDataToLocalStorage() {
+            localStorage.setItem('cvDataSamborski', JSON.stringify(this.cvData));
+            // console.log('Data saved to localStorage');
+          },
+          loadDataFromLocalStorage() {
+            const savedData = localStorage.getItem('cvDataSamborski');
+            if (savedData) {
+              try {
+                this.cvData = JSON.parse(savedData);
+                // console.log('Data loaded from localStorage');
+              } catch(e) {
+                console.error("Error parsing data from localStorage", e);
+                this.cvData = JSON.parse(JSON.stringify(defaultCvData)); // Fallback
+              }
+            } else {
+              // console.log('No data in localStorage, using defaults.');
+              this.cvData = JSON.parse(JSON.stringify(defaultCvData));
+            }
+          },
+          resetData() {
+            if(confirm('¿Estás seguro de que quieres restaurar los datos por defecto? Perderás los cambios no guardados.')) {
+                this.cvData = JSON.parse(JSON.stringify(defaultCvData));
+                // Data will be auto-saved by the watcher
+            }
+          },
+          addItem(listName, defaultValue = 'Nuevo ítem') {
+            if (this.cvData[listName] && Array.isArray(this.cvData[listName])) {
+              this.cvData[listName].push(defaultValue);
+            }
+          },
+          removeItem(listName, index) {
+            if (this.cvData[listName] && Array.isArray(this.cvData[listName])) {
+              this.cvData[listName].splice(index, 1);
+            }
+          },
+          // Dark mode logic (from original, slightly adapted)
+          toggleDarkMode() {
+            const htmlElement = document.documentElement;
+            if (htmlElement.classList.contains('dark')) {
+              htmlElement.classList.remove('dark');
+              localStorage.theme = 'light';
+            } else {
+              htmlElement.classList.add('dark');
+              localStorage.theme = 'dark';
+            }
+          },
+          applyInitialTheme() {
+            const htmlElement = document.documentElement;
+            if (
+              localStorage.theme === 'dark' ||
+              (!('theme' in localStorage) &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+            ) {
+              htmlElement.classList.add('dark');
+            } else {
+              htmlElement.classList.remove('dark');
+            }
+          }
+        },
+        watch: {
+          cvData: {
+            handler() {
+              this.saveDataToLocalStorage();
+            },
+            deep: true, // Important for nested objects and arrays
+          },
+        },
+        created() {
+          this.loadDataFromLocalStorage();
+          this.applyInitialTheme(); // Apply theme on creation
+        },
+      });
+
+      app.mount('#app');
+    </script>
   </body>
 </html>
