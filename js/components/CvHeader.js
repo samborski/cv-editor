@@ -1,5 +1,6 @@
 // js/components/CvHeader.js
 const CvHeader = {
+    // ... (props, data, watch sin cambios)
     props: ['cvData', 'editMode'],
     data() {
         return {
@@ -16,7 +17,7 @@ const CvHeader = {
         }
     },
     template: `
-    <header class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white mt-12 md:mt-0">
+    <header class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white mt-16 print:mt-0">
         <div class="flex-shrink-0 mb-5 md:mb-0 print:mb-0 md:mr-5 print:mr-5">
             <img :src="cvData.profilePicture" alt="Foto de perfil"
                  class="w-32 max-w-[150px] min-w-[80px] print:w-28 rounded-full object-cover border-2 border-primary print:!border-black shadow" />
