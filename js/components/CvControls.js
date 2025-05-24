@@ -16,7 +16,7 @@ const CvControls = {
                         title="Restaurar datos por defecto">
                         <i class="fa-solid fa-undo"></i>
                     </button>
-                    <button @click="window.print()"
+                    <button @click="triggerPrint"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
                         title="Imprimir Currículum">
                         <i class="fa-solid fa-print text-lg"></i>
@@ -39,18 +39,22 @@ const CvControls = {
                         class="p-2 text-blue-500 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-700 rounded-full transition-colors cursor-pointer">
                         <i class="fa-solid fa-file-import text-lg"></i>
                     </label>
-                    <input type="file" id="importFile" @change="handleImport" accept=".json" class="hidden">
+                    <input type="file" id="importFile" @change="handleImportFile" accept=".json" class="hidden">
                 </div>
             </div>
         </div>
     `,
     methods: {
-        handleImport(event) {
+        handleImportFile(event) {
             const file = event.target.files[0];
             if (file) {
                 this.$emit('importData', file);
-                event.target.value = null; // Reset input para permitir re-importar el mismo archivo
+                // Reset input para permitir re-importar el mismo archivo si es necesario
+                event.target.value = null; 
             }
+        },
+        triggerPrint() {
+            window.print();
         }
     }
 };
