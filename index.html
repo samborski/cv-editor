@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor de CV Offline</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app" class="container">
+      <h1>Editor de Currículum Vitae</h1>
+
+      <div class="cv-section">
+        <h2>Información Personal</h2>
+        <label
+          >Nombre Completo:
+          <input type="text" v-model="cv.personal.nombre" @input="saveCV"
+        /></label>
+        <label
+          >Email:
+          <input type="email" v-model="cv.personal.email" @input="saveCV"
+        /></label>
+        <label
+          >Teléfono:
+          <input type="tel" v-model="cv.personal.telefono" @input="saveCV"
+        /></label>
+        <label
+          >Resumen / Perfil:
+          <textarea v-model="cv.personal.resumen" @input="saveCV"></textarea>
+        </label>
+      </div>
+
+      <!-- Educación -->
+      <div class="cv-section">
+        <h2>Educación</h2>
+        <div
+          v-for="(item, index) in cv.educacion"
+          :key="'edu-' + index"
+          class="cv-item"
+        >
+          <label
+            >Título/Certificación:
+            <input type="text" v-model="item.titulo" @input="saveCV"
+          /></label>
+          <label
+            >Institución:
+            <input type="text" v-model="item.institucion" @input="saveCV"
+          /></label>
+          <label
+            >Fechas (Ej: 2020 - 2024):
+            <input type="text" v-model="item.fechas" @input="saveCV"
+          /></label>
+          <button @click="removeEducacionItem(index)" class="btn-remove">
+            Eliminar
+          </button>
+        </div>
+        <button @click="addEducacionItem" class="btn-add">
+          Añadir Educación
+        </button>
+      </div>
+
+      <!-- Experiencia Laboral -->
+      <div class="cv-section">
+        <h2>Experiencia Laboral</h2>
+        <div
+          v-for="(item, index) in cv.experiencia"
+          :key="'exp-' + index"
+          class="cv-item"
+        >
+          <label
+            >Cargo/Puesto:
+            <input type="text" v-model="item.puesto" @input="saveCV"
+          /></label>
+          <label
+            >Empresa: <input type="text" v-model="item.empresa" @input="saveCV"
+          /></label>
+          <label
+            >Fechas (Ej: Ene 2021 - Dic 2023):
+            <input type="text" v-model="item.fechas" @input="saveCV"
+          /></label>
+          <label
+            >Descripción:
+            <textarea v-model="item.descripcion" @input="saveCV"></textarea>
+          </label>
+          <button @click="removeExperienciaItem(index)" class="btn-remove">
+            Eliminar
+          </button>
+        </div>
+        <button @click="addExperienciaItem" class="btn-add">
+          Añadir Experiencia
+        </button>
+      </div>
+
+      <!-- Habilidades / Software y Aplicaciones -->
+      <div class="cv-section">
+        <h2>Habilidades / Software y Aplicaciones</h2>
+        <div
+          v-for="(item, index) in cv.habilidades"
+          :key="'skill-' + index"
+          class="cv-item skill-item"
+        >
+          <input
+            type="text"
+            v-model="item.nombre"
+            @input="saveCV"
+            placeholder="Ej: JavaScript, Photoshop"
+          />
+          <button @click="removeHabilidadItem(index)" class="btn-remove-inline">
+            X
+          </button>
+        </div>
+        <button @click="addHabilidadItem" class="btn-add">
+          Añadir Habilidad
+        </button>
+      </div>
+
+      <!-- Otros Conocimientos -->
+      <div class="cv-section">
+        <h2>Otros Conocimientos</h2>
+        <div
+          v-for="(item, index) in cv.otrosConocimientos"
+          :key="'other-' + index"
+          class="cv-item skill-item"
+        >
+          <input
+            type="text"
+            v-model="item.nombre"
+            @input="saveCV"
+            placeholder="Ej: Electricidad domiciliaria"
+          />
+          <button
+            @click="removeOtroConocimientoItem(index)"
+            class="btn-remove-inline"
+          >
+            X
+          </button>
+        </div>
+        <button @click="addOtroConocimientoItem" class="btn-add">
+          Añadir Conocimiento
+        </button>
+      </div>
+
+      <!-- Disponibilidad -->
+      <div class="cv-section">
+        <h2>Disponibilidad</h2>
+        <label>
+          <input
+            type="text"
+            v-model="cv.disponibilidad"
+            @input="saveCV"
+            placeholder="Ej: Tiempo completo, ingreso inmediato"
+          />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button @click="exportCV" class="btn-action">Exportar CV (JSON)</button>
+        <label class="btn-action import-label">
+          Importar CV (JSON)
+          <input
+            type="file"
+            @change="importCV"
+            accept=".json"
+            style="display: none"
+          />
+        </label>
+        <button @click="clearCV" class="btn-action btn-danger">
+          Limpiar CV (¡Cuidado!)
+        </button>
+      </div>
+    </div>
+
+    <!-- Vue.js CDN (puedes descargarlo y enlazarlo localmente si prefieres total offline) -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
