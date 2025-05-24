@@ -7,8 +7,14 @@ const CvProfessionalProfile = {
             <h2 class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black">Perfil Profesional</h2>
             <p v-if="!editMode" class="mb-6 text-customText dark:text-dark-customText print:!text-black"
                v-html="profile.replace(/\\n/g, '<br />')"></p>
-            <textarea v-else :value="profile" @input="$emit('update:profile', $event.target.value)"
-                      class="edit-textarea mb-6"></textarea>
+            <template v-else>
+                <textarea :value="profile" @input="$emit('update:profile', $event.target.value)"
+                          placeholder="Describe brevemente tu experiencia, especialidades y objetivos profesionales..."
+                          class="edit-textarea mb-2"></textarea>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">
+                    Puedes usar saltos de línea simples; se convertirán en <br> en la vista.
+                </p>
+            </template>
         </div>
     `
 };
