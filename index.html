@@ -73,7 +73,7 @@
       >
       </cv-controls>
 
-      <cv-header :cv-data="cvData" :edit-mode="editMode"></cv-header>
+      <cv-header :cv-data="cvData" :edit-mode="editMode" @set-edit-mode="setEditModeGlobally"></cv-header>
 
       <main class="flex flex-col md:flex-row print:flex-row gap-6 print:gap-4">
         <section

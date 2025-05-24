@@ -1,103 +1,152 @@
-/* Estilos base para inputs y textareas (sin cambios significativos aquí) */
+/* css/main.css */
+
+/* Estilos base para inputs y textareas */
 .edit-input {
   width: 100%;
   padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc; /* Borde para tema claro */
+  border: 1px solid #d1d5db; /* gray-300 para tema claro */
   border-radius: 0.25rem;
   margin-bottom: 0.25rem;
   background-color: white; 
-  color: black; 
+  color: #111827; /* gray-900 */
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .edit-textarea {
   width: 100%;
   padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc; /* Borde para tema claro */
+  border: 1px solid #d1d5db; /* gray-300 para tema claro */
   border-radius: 0.25rem;
   min-height: 80px;
   background-color: white; 
-  color: black; 
+  color: #111827; /* gray-900 */
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Ajuste de borde para tema oscuro (inputs normales, no en foco) */
+/* Ajuste de inputs/textareas para tema oscuro (normal, no en foco) */
 .dark .edit-input,
 .dark .edit-textarea {
-  border-color: #4a5568; /* Un gris más oscuro para el borde en tema oscuro (ej. gray-600 de Tailwind) */
-  background-color: #2d3748; /* Un fondo de input más oscuro (ej. gray-700 de Tailwind) */
-  color: #e2e8f0; /* Texto más claro para tema oscuro (ej. gray-200 de Tailwind) */
+  border-color: #4b5563; /* gray-600 */
+  background-color: #374151; /* gray-700 */
+  color: #f3f4f6; /* gray-100 */
 }
 
 
-/* --- ESTILOS DE FOCO MEJORADOS PARA TEMA CLARO Y OSCURO --- */
-
+/* --- ESTILOS DE FOCO PARA INPUTS Y TEXTAREAS --- */
 /* Foco para Tema Claro */
 html:not(.dark) .edit-input:focus,
 html:not(.dark) .edit-textarea:focus {
   outline: none;
-  border-color: var(--primary-color, #0077cc); /* Azul primario para borde en tema claro */
-  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.4); /* Resplandor azul semitransparente */
+  border-color: #0077cc; 
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.4); 
 }
 
 /* Foco para Tema Oscuro */
 html.dark .edit-input:focus,
 html.dark .edit-textarea:focus {
   outline: none;
-  /* Usamos el color primario del tema oscuro definido en tu tailwind.config.js */
-  /* Tailwind genera esto como --dark-primary-color si tienes extend: { colors: { dark: { primary: '...' } } } */
-  /* Si no, usamos un valor explícito que contraste bien. */
-  border-color: var(--dark-primary-color, #60a5fa); /* Azul claro del tema oscuro */
-  /* Un resplandor que contraste con el fondo oscuro */
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5); /* Mismo color que el borde, pero con opacidad */
-  /* Alternativa: un color completamente diferente para el resplandor si se prefiere */
-  /* box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5); */ /* Ejemplo: un resplandor ámbar */
+  border-color: #60a5fa; 
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5); 
+}
+
+/* --- ESTILOS DE FOCO PARA BOTONES DE ICONO --- */
+button.icon-button {
+    background: none;
+    border: none;
+    padding: 0.25rem; 
+    cursor: pointer;
+    border-radius: 0.25rem; 
+    line-height: 1; /* Para mejor alineación vertical del icono */
+    display: inline-flex; /* Para centrar el icono si es necesario */
+    align-items: center;
+    justify-content: center;
+}
+
+html:not(.dark) button.icon-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.4); 
+}
+
+html.dark button.icon-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.6); 
+}
+
+/* --- ESTILOS DE FOCO PARA ENLACES <a> --- */
+a:focus-visible { /* Usar :focus-visible para mejor accesibilidad, solo muestra el foco al navegar con teclado */
+  outline: 2px solid #0077cc; 
+  outline-offset: 2px; 
+  border-radius: 0.125rem; 
+}
+
+html.dark a:focus-visible {
+  outline-color: #60a5fa; 
+}
+
+/* --- ESTILOS DE FOCO PARA BOTONES PRINCIPALES (CvControls) Y ADD-ITEM --- */
+#botones button:not(.icon-button):focus-visible,
+#botones a:focus-visible, /* Si volvemos a usar 'a' para vcf */
+#botones label:focus-within, /* Para el label de importación */
+.add-item-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.4);
+}
+
+html.dark #botones button:not(.icon-button):focus-visible,
+html.dark #botones a:focus-visible,
+html.dark #botones label:focus-within,
+html.dark .add-item-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.6);
 }
 
 
-.delete-item-btn {
-  margin-left: 8px;
-  color: #ef4444; /* Tailwind red-500 */
+/* --- ESTILOS DE HOVER PARA CAMPOS EDITABLES (Opción 3) --- */
+.field-hoverable {
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
+  padding: 0.1rem 0.2rem; 
+  margin: -0.1rem -0.2rem; 
+  border-radius: 0.25rem;
+  position: relative; /* Para el pseudo-elemento si se usa */
 }
-.delete-item-btn:hover { color: #dc2626; /* Tailwind red-600 */ }
+
+html:not(.dark) .field-hoverable:hover {
+  background-color: #e0e7ff; /* Un azul muy claro (indigo-100 o blue-100) */
+}
+
+html.dark .field-hoverable:hover {
+  background-color: #374151; /* gray-700 */
+}
+
+/* Quitar estilos de foco no deseados en field-hoverable si el foco lo maneja el input interno */
+.field-hoverable:focus {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent; /* Evitar que el hover persista si el span recibe foco accidentalmente */
+}
+.field-hoverable:focus-within { /* Si el input dentro recibe foco, no aplicar hover al contenedor */
+    background-color: transparent;
+}
+
+
+/* --- OTROS ESTILOS --- */
+.delete-item-btn { /* Este ahora es un button.icon-button, los estilos de color están en el template */ }
 
 .add-item-btn {
   display: inline-block;
   padding: 4px 8px;
   margin-top: 8px;
-  background-color: #3b82f6; /* Tailwind blue-500 */
+  background-color: #3b82f6; 
   color: white;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.875rem; /* Tailwind text-sm */
+  font-size: 0.875rem; 
   transition: background-color 0.2s ease-in-out;
 }
-.add-item-btn:hover { background-color: #2563eb; /* Tailwind blue-600 */ }
-
-[v-cloak] { display: none; }
-
-/* Estilos para input con foco */
-.edit-input:focus, .edit-textarea:focus {
-  outline: none;
-  border-color: var(--primary-color, #0077cc); /* Usar color primario de Tailwind */
-  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.4); /* Sombra sutil */
+.add-item-btn:hover {
+  background-color: #2563eb; 
 }
 
-/* Para el input de importación de archivo */
-#importFile {
-  display: none; /* Ocultar el input de archivo real */
-}
-.import-button { /* Estilo para el botón que dispara el click en el input de archivo */
-  /* Puedes usar clases de Tailwind aquí también si lo prefieres */
-  padding: 0.5rem 1rem;
-  background-color: #22c55e; /* green-500 */
-  color: white;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.import-button:hover {
-  background-color: #16a34a; /* green-600 */
+[v-cloak] { 
+  display: none; 
 }
