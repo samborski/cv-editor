@@ -1,151 +1,74 @@
-body {
-    font-family: sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
-    color: #333;
+/* Basic styling for input fields in edit mode */
+.edit-input {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  margin-bottom: 0.25rem;
+  background-color: white; /* Ensure readability in dark mode */
+  color: black; /* Ensure readability in dark mode */
+}
+.edit-input.inline-block { /* For inputs that should not take full width */
+    display: inline-block;
+    width: auto;
+}
+.edit-input.text-2xl { /* Match h1 font size */
+    font-size: 1.5rem; /* Tailwind text-2xl */
+    line-height: 2rem;
+}
+.edit-input.md\:text-3xl { /* Match h1 font size on md screens */
+    /* This would require media queries if not using Tailwind for the input itself */
+}
+.edit-input.font-bold { /* Match h1 font weight */
+    font-weight: 700;
 }
 
-.container {
-    max-width: 800px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.edit-textarea {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  min-height: 80px;
+  background-color: white; /* Ensure readability in dark mode */
+  color: black; /* Ensure readability in dark mode */
 }
 
-h1, h2 {
-    color: #333;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 5px;
-    margin-bottom: 15px;
+.delete-item-btn {
+  margin-left: 8px;
+  color: #ef4444; /* Tailwind red-500 */
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+.delete-item-btn:hover {
+  color: #dc2626; /* Tailwind red-600 */
 }
 
-h1 {
-    text-align: center;
-    color: #0056b3;
+.add-item-btn {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-top: 8px;
+  background-color: #3b82f6; /* Tailwind blue-500 */
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem; /* Tailwind text-sm */
+  transition: background-color 0.2s ease-in-out;
+}
+.add-item-btn:hover {
+  background-color: #2563eb; /* Tailwind blue-600 */
 }
 
-.cv-section {
-    margin-bottom: 30px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+/* Hide uncompiled Vue template */
+[v-cloak] { 
+  display: none; 
 }
 
-.cv-item {
-    border: 1px solid #eee;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    background-color: #fff;
-    position: relative; /* For absolute positioning of remove button if needed */
-}
-
-.skill-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-textarea {
-    width: calc(100% - 22px); /* Account for padding and border */
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-
-button, .btn-action {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-right: 5px;
-    margin-top: 5px;
-}
-
-.btn-add {
-    background-color: #28a745;
-    color: white;
-}
-.btn-add:hover {
-    background-color: #218838;
-}
-
-.btn-remove {
-    background-color: #dc3545;
-    color: white;
-    /* position: absolute;
-    top: 10px;
-    right: 10px; */
-    display: block;
-    margin-top: 5px;
-}
-.btn-remove:hover {
-    background-color: #c82333;
-}
-
-.btn-remove-inline {
-    background-color: #ffc107;
-    color: #333;
-    padding: 5px 10px;
-    font-size: 0.9em;
-}
-.btn-remove-inline:hover {
-    background-color: #e0a800;
-}
-
-.actions {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-    text-align: center;
-}
-
-.btn-action {
-    background-color: #007bff;
-    color: white;
-    margin: 5px;
-}
-.btn-action:hover {
-    background-color: #0056b3;
-}
-.btn-danger {
-    background-color: #dc3545;
-}
-.btn-danger:hover {
-    background-color: #c82333;
-}
-.import-label {
-    display: inline-block; /* Make it behave like a button */
-    padding: 10px 15px;
-    background-color: #17a2b8;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: normal; /* Override label bold */
-}
-.import-label:hover {
-    background-color: #138496;
+/* Minor adjustments for social media inputs in edit mode if needed */
+/* The current structure places inputs directly below each icon block, which might get crowded.
+   If you want them grouped, you'd adjust the HTML structure and potentially add specific CSS here.
+   For now, the HTML places them somewhat logically.
+*/
+#botones .flex.gap-2 button,
+#botones .flex.gap-2 a {
+  flex-shrink: 0; /* Prevent buttons from shrinking too much if many are added */
 }

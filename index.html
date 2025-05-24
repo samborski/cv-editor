@@ -44,6 +44,7 @@
       };
     </script>
     <link rel="stylesheet" href="print.css" />
+    <link rel="stylesheet" href="style.css" /> <!-- Our new custom styles -->
     <meta
       property="og:title"
       content="Currículum de Daniel Gustavo Samborski"
@@ -82,46 +83,6 @@
       sizes="180x180"
       href="foto-de-perfil-180x180.png"
     />
-    <style>
-      /* Basic styling for input fields in edit mode */
-      .edit-input {
-        width: 100%;
-        padding: 0.25rem 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 0.25rem;
-        margin-bottom: 0.25rem;
-        background-color: white;
-        color: black;
-      }
-      .edit-textarea {
-        width: 100%;
-        padding: 0.25rem 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 0.25rem;
-        min-height: 80px;
-        background-color: white;
-        color: black;
-      }
-      .delete-item-btn {
-        margin-left: 8px;
-        color: #ef4444; /* red-500 */
-        cursor: pointer;
-      }
-      .add-item-btn {
-        display: inline-block;
-        padding: 4px 8px;
-        margin-top: 8px;
-        background-color: #3b82f6; /* blue-500 */
-        color: white;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.875rem;
-      }
-      .add-item-btn:hover {
-        background-color: #2563eb; /* blue-600 */
-      }
-      [v-cloak] { display: none; }
-    </style>
   </head>
 
   <body
@@ -331,7 +292,6 @@
             >
               <span v-if="!editMode" v-html="item"></span>
               <template v-else>
-                <!-- Using textarea for skills as they can be longer and contain HTML (like <strong>) -->
                 <textarea v-model="cvData.technicalSkills[index]" class="edit-textarea" rows="2"></textarea>
                 <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('technicalSkills', index)"></i>
               </template>
@@ -357,9 +317,7 @@
         </section>
       </main>
 
-      <!-- Envolver las secciones de compartir y redes sociales en un contenedor flex -->
       <div class="w-full print:hidden mt-6 flex flex-col md:flex-row gap-6">
-        <!-- Sección Compartir Currículum -->
         <div class="flex-1 text-center">
           <h2
             class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
@@ -410,7 +368,6 @@
           </div>
         </div>
 
-        <!-- Sección Redes Sociales -->
         <div class="flex-1 text-center">
           <h2
             class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
@@ -461,158 +418,13 @@
           </div>
            <div v-if="editMode" class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                 Modifique las URLs de sus redes sociales arriba.
+                Los inputs de redes sociales aparecerán debajo de cada icono respectivamente.
             </div>
         </div>
       </div>
     </div>
 
-    <!-- Vue.js CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-    <script>
-      const defaultCvData = {
-        name: 'Daniel Gustavo Samborski',
-        email: 'danielgsamborski@gmail.com',
-        phone: '+54 3412294413',
-        websiteDisplay: 'samborski.github.io/curriculum',
-        websiteUrl: 'https://samborski.github.io/curriculum',
-        address: 'San Diego 1129, Villa Gob. Gálvez',
-        birthdate: '18 de enero de 1973',
-        profilePicture: 'foto-de-perfil.jpg', // Ensure this image is accessible
-        pdfLink: 'Currículum de Daniel Gustavo Samborski.pdf?v=20250503',
-        vcfLink: 'contact.vcf',
-        professionalProfile: `Técnico especializado en mantenimiento y reparación de PC, desarrollo de sitios web y electricidad domiciliaria.
-Amplia experiencia como trabajador autónomo en distintas áreas, brindando soluciones tecnológicas y eléctricas a clientes particulares y PyMEs.
-Comprometido con la calidad del servicio y con una gran capacidad de adaptación a distintas necesidades del mercado.`,
-        education: [
-          '<b>Auxiliar Mecánico de Motocicletas</b> (CIC - Centro de Capacitación)',
-          '<b>Montador Electricista Domiciliario</b> (Centro de Capacitación Laboral Nº 6619)',
-          '<b>Desarrollo de Sitios Web 2.0 con DRUPAL</b> (FAGDUT Instituto de Capacitación)',
-          '<b>Armado, Mantenimiento y Reparación de PC, Redes y WIFI</b> (FAGDUT Instituto de Capacitación)',
-          '<b>Desarrollo de Sitios Web con JAVA y .NET</b> (FAGDUT Instituto de Capacitación)',
-          '<b>Programación en BASIC</b> (Maxicomp Computación)',
-          '<b>Operador de Computadoras</b> (Maxicomp Computación)',
-        ],
-        experience: [
-          '<b>Freelance</b> - Paseador de perros',
-          '<b>CAR’s Racing</b> - Auxiliar Mecánico Automotriz',
-          '<b>Freelance</b> - Electricista Domiciliario: Instalaciones eléctricas y reparaciones en hogares y comercios',
-          '<b>Freelance</b> - Técnico en Computadoras: Reparación y mantenimiento de computadoras para particulares y PyMES',
-          '<b>Comerciante en Negocio Familiar</b> - Atención al cliente, reposición de productos y tareas de limpieza',
-          '<b>Freelance</b> - Trabajos de Medio Tiempo: Repartidor de volantes, cuidado de enfermos en hospitales, y otros servicios varios',
-        ],
-        technicalSkills: [
-          '<strong>Programación y Desarrollo Web:</strong> HTML, CSS, SASS, JavaScript, PHP, MySQL, WordPress, Drupal, Bootstrap, Markdown, Python, .NET, Java',
-          '<strong>Software y Aplicaciones:</strong> Microsoft Office, LibreOffice, Visual Studio Code, Eclipse, Thunderbird, Google Apps',
-          '<strong>Otros Conocimientos:</strong> Electricidad domiciliaria',
-        ],
-        availability: 'Tiempo completo, ingreso inmediato',
-        socialLinks: {
-          linkedin: 'https://www.linkedin.com/in/danielgsamborski',
-          github: 'https://github.com/samborski',
-          twitter: 'https://x.com/dgsamborski',
-          facebook: 'https://www.facebook.com/danielgsamborski',
-        }
-      };
-
-      const app = Vue.createApp({
-        data() {
-          return {
-            editMode: false,
-            cvData: JSON.parse(JSON.stringify(defaultCvData)) // Deep copy
-          };
-        },
-        computed: {
-            encodedWebsiteUrl() {
-                return encodeURIComponent(this.cvData.websiteUrl);
-            },
-            encodedShareText() {
-                return encodeURIComponent(`Currículum de ${this.cvData.name}`);
-            },
-            encodedShareTitle() {
-                return encodeURIComponent(`Currículum de ${this.cvData.name}`);
-            },
-            encodedShareSummary() {
-                return encodeURIComponent('Desarrollador Web y Electricista');
-            }
-        },
-        methods: {
-          toggleEditMode() {
-            this.editMode = !this.editMode;
-          },
-          saveDataToLocalStorage() {
-            localStorage.setItem('cvDataSamborski', JSON.stringify(this.cvData));
-            // console.log('Data saved to localStorage');
-          },
-          loadDataFromLocalStorage() {
-            const savedData = localStorage.getItem('cvDataSamborski');
-            if (savedData) {
-              try {
-                this.cvData = JSON.parse(savedData);
-                // console.log('Data loaded from localStorage');
-              } catch(e) {
-                console.error("Error parsing data from localStorage", e);
-                this.cvData = JSON.parse(JSON.stringify(defaultCvData)); // Fallback
-              }
-            } else {
-              // console.log('No data in localStorage, using defaults.');
-              this.cvData = JSON.parse(JSON.stringify(defaultCvData));
-            }
-          },
-          resetData() {
-            if(confirm('¿Estás seguro de que quieres restaurar los datos por defecto? Perderás los cambios no guardados.')) {
-                this.cvData = JSON.parse(JSON.stringify(defaultCvData));
-                // Data will be auto-saved by the watcher
-            }
-          },
-          addItem(listName, defaultValue = 'Nuevo ítem') {
-            if (this.cvData[listName] && Array.isArray(this.cvData[listName])) {
-              this.cvData[listName].push(defaultValue);
-            }
-          },
-          removeItem(listName, index) {
-            if (this.cvData[listName] && Array.isArray(this.cvData[listName])) {
-              this.cvData[listName].splice(index, 1);
-            }
-          },
-          // Dark mode logic (from original, slightly adapted)
-          toggleDarkMode() {
-            const htmlElement = document.documentElement;
-            if (htmlElement.classList.contains('dark')) {
-              htmlElement.classList.remove('dark');
-              localStorage.theme = 'light';
-            } else {
-              htmlElement.classList.add('dark');
-              localStorage.theme = 'dark';
-            }
-          },
-          applyInitialTheme() {
-            const htmlElement = document.documentElement;
-            if (
-              localStorage.theme === 'dark' ||
-              (!('theme' in localStorage) &&
-                window.matchMedia('(prefers-color-scheme: dark)').matches)
-            ) {
-              htmlElement.classList.add('dark');
-            } else {
-              htmlElement.classList.remove('dark');
-            }
-          }
-        },
-        watch: {
-          cvData: {
-            handler() {
-              this.saveDataToLocalStorage();
-            },
-            deep: true, // Important for nested objects and arrays
-          },
-        },
-        created() {
-          this.loadDataFromLocalStorage();
-          this.applyInitialTheme(); // Apply theme on creation
-        },
-      });
-
-      app.mount('#app');
-    </script>
+    <script src="script.js" defer></script>
   </body>
 </html>
