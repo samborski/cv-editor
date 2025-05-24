@@ -1,23 +1,23 @@
 // js/components/CvHeader.js
 const CvHeader = {
     props: ['cvData', 'editMode'],
-    emits: [], // Puedes declarar emits si los usas, por ahora no es crucial para esto
+    emits: [],
     data() {
         return {
             emailError: '',
-            websiteUrlError: '' // Nuevo estado para error de URL del sitio web
+            websiteUrlError: ''
         }
     },
     watch: {
         'cvData.email'(newEmail) {
-            if (this.editMode && newEmail && !Utils.isValidEmail(newEmail)) {
+            if (this.editMode && newEmail && newEmail.trim() !== '' && !Utils.isValidEmail(newEmail)) {
                 this.emailError = 'Formato de email inválido.';
             } else {
                 this.emailError = '';
             }
         },
-        'cvData.websiteUrl'(newUrl) { // Nuevo watcher para websiteUrl
-            if (this.editMode && newUrl && !Utils.isValidUrl(newUrl)) {
+        'cvData.websiteUrl'(newUrl) {
+            if (this.editMode && newUrl && newUrl.trim() !== '' && !Utils.isValidUrl(newUrl)) {
                 this.websiteUrlError = 'Formato de URL inválido.';
             } else {
                 this.websiteUrlError = '';
@@ -28,9 +28,10 @@ const CvHeader = {
         clearField(fieldName) {
             if (this.cvData.hasOwnProperty(fieldName)) {
                 this.cvData[fieldName] = '';
-                 // Limpiar errores asociados si se limpia el campo
                 if (fieldName === 'email') this.emailError = '';
                 if (fieldName === 'websiteUrl') this.websiteUrlError = '';
+                if (fieldName === 'websiteUrl' && !this.cvData.websiteDisplay) this.cvData.websiteDisplay = '';
+                if (fieldName === 'websiteDisplay' && !this.cvData.websiteUrl) this.cvData.websiteUrl = '';
             }
         }
     },
@@ -56,47 +57,56 @@ const CvHeader = {
                        class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-2 top-1/2 -translate-y-1/2 text-base"></i>
                 </div>
             </h1>
+            
             <p class="print:!text-black">
                 <i class="fa-solid fa-envelope text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
-                <a :href="'mailto:' + cvData.email" class="text-primary dark:text-dark-primary hover:underline print:!text-black">
-                    <span v-if="!editMode">{{ cvData.email }}</span>
-                    <span v-else class="relative inline-block">
+                <template v-if="!editMode">
+                    <a :href="'mailto:' + cvData.email" class="text-primary dark:text-dark-primary hover:underline print:!text-black">{{ cvData.email }}</a>
+                </template>
+                <template v-else>
+                    <span class="relative inline-block">
                         <input type="email" v-model="cvData.email" class="edit-input inline-block w-auto pr-7">
                         <i v-if="cvData.email" @click="clearField('email')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
                     </span>
-                </a>
-                <span v-if="editMode && emailError" class="text-red-500 text-xs ml-2 block md:inline">{{ emailError }}</span>
-                |
+                    <span v-if="emailError" class="text-red-500 text-xs ml-2 block md:inline">{{ emailError }}</span>
+                </template>
+
                 <i class="fa-solid fa-phone text-lightText dark:text-dark-lightText mx-2 print:!text-black"></i>
-                <span v-if="!editMode">{{ cvData.phone }}</span>
-                <span v-else class="relative inline-block">
-                    <input type="tel" v-model="cvData.phone" class="edit-input inline-block w-auto pr-7">
-                    <i v-if="cvData.phone" @click="clearField('phone')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
-                </span>
+                <template v-if="!editMode">
+                    <span>{{ cvData.phone }}</span>
+                </template>
+                <template v-else>
+                    <span class="relative inline-block">
+                        <input type="tel" v-model="cvData.phone" class="edit-input inline-block w-auto pr-7">
+                        <i v-if="cvData.phone" @click="clearField('phone')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                    </span>
+                </template>
                 <a :href="'https://api.whatsapp.com/send?phone=' + (cvData.phone || '').replace(/\\s+/g, '')" target="_blank"
                    class="text-primary dark:text-dark-primary hover:text-green-500 dark:hover:text-green-400 ml-2 print:hidden" title="WhatsApp">
                     <i class="fa-brands fa-whatsapp"></i>
                 </a>
             </p>
+
             <p class="print:!text-black">
                 <i class="fa-solid fa-globe text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
-                <a :href="cvData.websiteUrl" target="_blank" 
-                   :class="{'pointer-events-none': editMode && websiteUrlError}"
-                   class="text-primary dark:text-dark-primary hover:underline print:!text-black">
-                    <span v-if="!editMode">{{ cvData.websiteDisplay }}</span>
-                    <template v-else>
-                        <span class="relative inline-block mr-1">
-                            <input type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar (ej: miweb.com)" class="edit-input inline-block w-auto pr-7">
-                            <i v-if="cvData.websiteDisplay" @click="clearField('websiteDisplay')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
-                        </span>
-                        <span class="relative inline-block">
-                            <input type="url" v-model="cvData.websiteUrl" placeholder="https://www.ejemplo.com" class="edit-input inline-block w-auto pr-7">
-                            <i v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
-                        </span>
-                    </template>
-                </a>
-                <span v-if="editMode && websiteUrlError" class="text-red-500 text-xs ml-2 block">{{ websiteUrlError }}</span>
+                <template v-if="!editMode">
+                    <a :href="cvData.websiteUrl" target="_blank" class="text-primary dark:text-dark-primary hover:underline print:!text-black">
+                        {{ cvData.websiteDisplay || cvData.websiteUrl }}
+                    </a>
+                </template>
+                <template v-else>
+                    <span class="relative inline-block mr-1">
+                        <input type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar (ej: miweb.com)" class="edit-input inline-block w-auto pr-7">
+                        <i v-if="cvData.websiteDisplay" @click="clearField('websiteDisplay')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                    </span>
+                    <span class="relative inline-block">
+                        <input type="url" v-model="cvData.websiteUrl" placeholder="https://www.ejemplo.com" class="edit-input inline-block w-auto pr-7">
+                        <i v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                    </span>
+                    <span v-if="websiteUrlError" class="text-red-500 text-xs ml-2 block">{{ websiteUrlError }}</span>
+                </template>
             </p>
+
             <p class="print:!text-black">
                 <i class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
                 <span v-if="!editMode">{{ cvData.address }}</span>
@@ -105,6 +115,7 @@ const CvHeader = {
                     <i v-if="cvData.address" @click="clearField('address')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-2 top-1/2 -translate-y-1/2"></i>
                 </span>
             </p>
+            
             <p class="print:!text-black">
                 <i class="fa-solid fa-cake-candles text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
                 <span v-if="!editMode">{{ cvData.birthdate }}</span>
