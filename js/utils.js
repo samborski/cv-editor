@@ -1,5 +1,6 @@
 // js/utils.js
 const Utils = {
+    // ... (encodeUrl, isValidEmail, generateId, generateVCF sin cambios) ...
     encodeUrl(url) {
         return encodeURIComponent(url);
     },
@@ -14,6 +15,7 @@ const Utils = {
     },
 
     generateVCF(cvData) {
+        // ... (código de generateVCF sin cambios)
         let vcfContent = "BEGIN:VCARD\n";
         vcfContent += "VERSION:3.0\n";
 
@@ -35,8 +37,6 @@ const Utils = {
             const addressParts = cvData.address.split(',');
             const street = addressParts[0] ? addressParts[0].trim() : '';
             const city = addressParts[1] ? addressParts[1].trim() : '';
-            // Simplificado, asumiendo que el país es Argentina.
-            // Para una estructura ADR completa, necesitarías más campos o un parseo más robusto.
             vcfContent += `ADR;TYPE=HOME:;;${street};${city};;;Argentina\n`;
         }
         
@@ -62,5 +62,43 @@ const Utils = {
         vcfContent += "END:VCARD";
 
         return vcfContent;
+    },
+
+    isValidUrl(urlString) {
+        if (!urlString || typeof urlString !== 'string') {
+            return false;
+        }
+        // Expresión regular simple para verificar si parece una URL.
+        // Para una validación más estricta, se podría usar new URL() pero puede ser demasiado restrictiva
+        // para URLs parciales o sin http/https.
+        // Esta regex busca algo como "protocolo://dominio.ext" o "www.dominio.ext" o "dominio.ext"
+        // Es permisiva, no valida TLDs correctos, etc.
+        const urlPattern = new RegExp('^(https?://)?'+ // protocolo
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // nombre de dominio
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // O una IP (v4)
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // puerto y path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        
+        if (!urlPattern.test(urlString)) {
+            return false;
+        }
+
+        // Intenta construir un objeto URL para una validación más robusta si tiene protocolo
+        // Si no tiene protocolo, se asume que es un dominio y puede ser válido sin él para ciertos contextos.
+        try {
+            if (urlString.startsWith('http://') || urlString.startsWith('https://')) {
+                new URL(urlString);
+            } else {
+                // Para dominios sin protocolo, podríamos intentar anteponer http y validar
+                // o simplemente aceptarlo si la regex básica pasó.
+                // Por ahora, si pasa la regex y no tiene protocolo, la consideramos "potencialmente válida"
+                // para no ser demasiado estrictos con entradas como "example.com".
+                // new URL('http://' + urlString); // Esto sería más estricto
+            }
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 };

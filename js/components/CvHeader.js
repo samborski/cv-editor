@@ -1,13 +1,11 @@
 // js/components/CvHeader.js
 const CvHeader = {
     props: ['cvData', 'editMode'],
-    emits: [ // Declarar los eventos que el componente puede emitir (buenas prácticas)
-        'update:cvDataName', // Asumiendo que actualizas cvData.name directamente en el padre
-        // O podrías emitir un evento más general como 'updateField' con el nombre del campo y el valor
-    ],
+    emits: [], // Puedes declarar emits si los usas, por ahora no es crucial para esto
     data() {
         return {
-            emailError: ''
+            emailError: '',
+            websiteUrlError: '' // Nuevo estado para error de URL del sitio web
         }
     },
     watch: {
@@ -17,28 +15,23 @@ const CvHeader = {
             } else {
                 this.emailError = '';
             }
+        },
+        'cvData.websiteUrl'(newUrl) { // Nuevo watcher para websiteUrl
+            if (this.editMode && newUrl && !Utils.isValidUrl(newUrl)) {
+                this.websiteUrlError = 'Formato de URL inválido.';
+            } else {
+                this.websiteUrlError = '';
+            }
         }
     },
     methods: {
         clearField(fieldName) {
-            // Esta es una forma directa si cvData es un objeto reactivo pasado como prop
-            // y el padre (app.js) está preparado para que sus propiedades internas cambien.
-            // Vue 3 maneja esto bien para objetos y arrays pasados como props.
-            // Sin embargo, la forma MÁS correcta si quisieras una encapsulación estricta sería
-            // emitir un evento para que el padre actualice el campo.
-            // Por simplicidad y dado que cvData es reactivo, esto funcionará.
             if (this.cvData.hasOwnProperty(fieldName)) {
                 this.cvData[fieldName] = '';
+                 // Limpiar errores asociados si se limpia el campo
+                if (fieldName === 'email') this.emailError = '';
+                if (fieldName === 'websiteUrl') this.websiteUrlError = '';
             }
-            // Ejemplo si quisieras emitir (requeriría manejo en app.js):
-            // this.$emit('updateField', { field: fieldName, value: '' });
-        },
-        // Método para actualizar el nombre (si decides usar @input en lugar de v-model)
-        updateName(event) {
-            // Si no usas v-model directamente en el input del template
-            // this.cvData.name = event.target.value;
-            // O, si cvData.name no fuera directamente modificable (raro con objetos en Vue 3):
-            // this.$emit('update:cvDataName', event.target.value);
         }
     },
     template: `
@@ -72,7 +65,7 @@ const CvHeader = {
                         <i v-if="cvData.email" @click="clearField('email')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
                     </span>
                 </a>
-                <span v-if="editMode && emailError" class="text-red-500 text-xs ml-2">{{ emailError }}</span>
+                <span v-if="editMode && emailError" class="text-red-500 text-xs ml-2 block md:inline">{{ emailError }}</span>
                 |
                 <i class="fa-solid fa-phone text-lightText dark:text-dark-lightText mx-2 print:!text-black"></i>
                 <span v-if="!editMode">{{ cvData.phone }}</span>
@@ -87,19 +80,22 @@ const CvHeader = {
             </p>
             <p class="print:!text-black">
                 <i class="fa-solid fa-globe text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
-                <a :href="cvData.websiteUrl" target="_blank" class="text-primary dark:text-dark-primary hover:underline print:!text-black">
+                <a :href="cvData.websiteUrl" target="_blank" 
+                   :class="{'pointer-events-none': editMode && websiteUrlError}"
+                   class="text-primary dark:text-dark-primary hover:underline print:!text-black">
                     <span v-if="!editMode">{{ cvData.websiteDisplay }}</span>
                     <template v-else>
                         <span class="relative inline-block mr-1">
-                            <input type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar" class="edit-input inline-block w-auto pr-7">
+                            <input type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar (ej: miweb.com)" class="edit-input inline-block w-auto pr-7">
                             <i v-if="cvData.websiteDisplay" @click="clearField('websiteDisplay')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
                         </span>
                         <span class="relative inline-block">
-                            <input type="url" v-model="cvData.websiteUrl" placeholder="URL del website" class="edit-input inline-block w-auto pr-7">
-                             <i v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                            <input type="url" v-model="cvData.websiteUrl" placeholder="https://www.ejemplo.com" class="edit-input inline-block w-auto pr-7">
+                            <i v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
                         </span>
                     </template>
                 </a>
+                <span v-if="editMode && websiteUrlError" class="text-red-500 text-xs ml-2 block">{{ websiteUrlError }}</span>
             </p>
             <p class="print:!text-black">
                 <i class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
