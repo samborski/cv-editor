@@ -1,0 +1,151 @@
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    text-align: center;
+    color: #0056b3;
+}
+
+.cv-section {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.cv-item {
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    background-color: #fff;
+    position: relative; /* For absolute positioning of remove button if needed */
+}
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea {
+    width: calc(100% - 22px); /* Account for padding and border */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+button, .btn-action {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.btn-add {
+    background-color: #28a745;
+    color: white;
+}
+.btn-add:hover {
+    background-color: #218838;
+}
+
+.btn-remove {
+    background-color: #dc3545;
+    color: white;
+    /* position: absolute;
+    top: 10px;
+    right: 10px; */
+    display: block;
+    margin-top: 5px;
+}
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+.btn-remove-inline {
+    background-color: #ffc107;
+    color: #333;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+.btn-remove-inline:hover {
+    background-color: #e0a800;
+}
+
+.actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.btn-action {
+    background-color: #007bff;
+    color: white;
+    margin: 5px;
+}
+.btn-action:hover {
+    background-color: #0056b3;
+}
+.btn-danger {
+    background-color: #dc3545;
+}
+.btn-danger:hover {
+    background-color: #c82333;
+}
+.import-label {
+    display: inline-block; /* Make it behave like a button */
+    padding: 10px 15px;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: normal; /* Override label bold */
+}
+.import-label:hover {
+    background-color: #138496;
+}
