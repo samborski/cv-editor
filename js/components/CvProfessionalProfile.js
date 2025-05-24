@@ -8,7 +8,9 @@ const CvProfessionalProfile = {
             <p v-if="!editMode" class="mb-6 text-customText dark:text-dark-customText print:!text-black"
                v-html="profile.replace(/\\n/g, '<br />')"></p>
             <template v-else>
-                <textarea :value="profile" @input="$emit('update:profile', $event.target.value)"
+                <label for="professionalProfileTextarea" class="sr-only">Descripción del Perfil Profesional</label>
+                <textarea id="professionalProfileTextarea"
+                          :value="profile" @input="$emit('update:profile', $event.target.value)"
                           placeholder="Describe brevemente tu experiencia, especialidades y objetivos profesionales..."
                           class="edit-textarea mb-2"></textarea>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">
