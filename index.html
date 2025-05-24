@@ -44,7 +44,8 @@
       };
     </script>
     <link rel="stylesheet" href="print.css" />
-    <link rel="stylesheet" href="style.css" /> <!-- Our new custom styles -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- Our new custom styles -->
     <meta
       property="og:title"
       content="Currículum de Daniel Gustavo Samborski"
@@ -88,7 +89,9 @@
   <body
     class="bg-customBg dark:bg-dark-customBg text-customText dark:text-dark-customText font-sans print:text-[11px] print:!bg-white print:!text-black"
   >
-    <div id="app" v-cloak
+    <div
+      id="app"
+      v-cloak
       class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg print:shadow-none print:p-0 print:!bg-white print:!text-black print-container"
     >
       <div class="relative">
@@ -101,7 +104,8 @@
             >
               <i class="fa-solid" :class="editMode ? 'fa-eye' : 'fa-edit'"></i>
             </button>
-             <button v-if="editMode"
+            <button
+              v-if="editMode"
               @click="resetData"
               class="p-2 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-700 rounded-full transition-colors"
               title="Restaurar datos por defecto"
@@ -115,14 +119,6 @@
             >
               <i class="fa-solid fa-print text-lg"></i>
             </button>
-            <a
-              :href="cvData.pdfLink" 
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Descargar PDF"
-            >
-              <i class="fa-solid fa-download text-lg"></i>
-            </a>
             <a
               :href="cvData.vcfLink"
               download
@@ -149,7 +145,13 @@
               alt="Foto de perfil"
               class="w-32 max-w-[150px] min-w-[80px] print:w-28 rounded-full object-cover border-2 border-primary print:!border-black shadow"
             />
-             <input v-if="editMode" type="text" v-model="cvData.profilePicture" placeholder="URL de la foto de perfil" class="edit-input mt-2">
+            <input
+              v-if="editMode"
+              type="text"
+              v-model="cvData.profilePicture"
+              placeholder="URL de la foto de perfil"
+              class="edit-input mt-2"
+            />
           </div>
           <div
             class="flex-1 text-center md:text-left print:text-left space-y-2"
@@ -158,7 +160,12 @@
               class="text-primary dark:text-dark-primary text-2xl md:text-3xl font-bold print:!text-black print:!mb-2"
             >
               <span v-if="!editMode">{{ cvData.name }}</span>
-              <input v-else type="text" v-model="cvData.name" class="edit-input text-2xl md:text-3xl font-bold">
+              <input
+                v-else
+                type="text"
+                v-model="cvData.name"
+                class="edit-input text-2xl md:text-3xl font-bold"
+              />
             </h1>
             <p class="print:!text-black">
               <i
@@ -168,15 +175,24 @@
                 :href="'mailto:' + cvData.email"
                 class="text-primary dark:text-dark-primary hover:underline print:!text-black"
                 ><span v-if="!editMode">{{ cvData.email }}</span>
-                <input v-else type="email" v-model="cvData.email" class="edit-input inline-block w-auto">
-              </a
-              >
+                <input
+                  v-else
+                  type="email"
+                  v-model="cvData.email"
+                  class="edit-input inline-block w-auto"
+                />
+              </a>
               |
               <i
                 class="fa-solid fa-phone text-lightText dark:text-dark-lightText mx-2 print:!text-black"
               ></i>
               <span v-if="!editMode">{{ cvData.phone }}</span>
-              <input v-else type="tel" v-model="cvData.phone" class="edit-input inline-block w-auto">
+              <input
+                v-else
+                type="tel"
+                v-model="cvData.phone"
+                class="edit-input inline-block w-auto"
+              />
               <a
                 :href="'https://api.whatsapp.com/send?phone=' + cvData.phone.replace(/\s+/g, '')"
                 target="_blank"
@@ -195,24 +211,45 @@
                 target="_blank"
                 class="text-primary dark:text-dark-primary hover:underline print:!text-black"
                 ><span v-if="!editMode">{{ cvData.websiteDisplay }}</span>
-                <input v-else type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar (website)" class="edit-input inline-block w-auto mr-1">
-                <input v-if="editMode" type="url" v-model="cvData.websiteUrl" placeholder="URL del website" class="edit-input inline-block w-auto">
-              </a
-              >
+                <input
+                  v-else
+                  type="text"
+                  v-model="cvData.websiteDisplay"
+                  placeholder="Texto a mostrar (website)"
+                  class="edit-input inline-block w-auto mr-1"
+                />
+                <input
+                  v-if="editMode"
+                  type="url"
+                  v-model="cvData.websiteUrl"
+                  placeholder="URL del website"
+                  class="edit-input inline-block w-auto"
+                />
+              </a>
             </p>
             <p class="print:!text-black">
               <i
                 class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black"
               ></i>
               <span v-if="!editMode">{{ cvData.address }}</span>
-              <input v-else type="text" v-model="cvData.address" class="edit-input">
+              <input
+                v-else
+                type="text"
+                v-model="cvData.address"
+                class="edit-input"
+              />
             </p>
             <p class="print:!text-black">
               <i
                 class="fa-solid fa-cake-candles text-lightText dark:text-dark-lightText mr-2 print:!text-black"
               ></i>
               <span v-if="!editMode">{{ cvData.birthdate }}</span>
-              <input v-else type="text" v-model="cvData.birthdate" class="edit-input">
+              <input
+                v-else
+                type="text"
+                v-model="cvData.birthdate"
+                class="edit-input"
+              />
             </p>
           </div>
         </header>
@@ -226,32 +263,45 @@
           >
             Perfil Profesional
           </h2>
-          <p v-if="!editMode"
+          <p
+            v-if="!editMode"
             class="mb-6 text-customText dark:text-dark-customText print:!text-black"
             v-html="cvData.professionalProfile.replace(/\n/g, '<br />')"
-          >
-          </p>
-          <textarea v-else v-model="cvData.professionalProfile" class="edit-textarea mb-6"></textarea>
-          
+          ></p>
+          <textarea
+            v-else
+            v-model="cvData.professionalProfile"
+            class="edit-textarea mb-6"
+          ></textarea>
+
           <h2
             class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
           >
             Educación
           </h2>
           <ul class="space-y-2 mb-6">
-            <li v-for="(item, index) in cvData.education" :key="'edu-' + index"
+            <li
+              v-for="(item, index) in cvData.education"
+              :key="'edu-' + index"
               class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
             >
               <span v-if="!editMode" v-html="item"></span>
               <template v-else>
-                <input type="text" v-model="cvData.education[index]" class="edit-input">
-                <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('education', index)"></i>
+                <input
+                  type="text"
+                  v-model="cvData.education[index]"
+                  class="edit-input"
+                />
+                <i
+                  class="fa-solid fa-trash delete-item-btn"
+                  @click="removeItem('education', index)"
+                ></i>
               </template>
             </li>
             <li v-if="editMode">
-                <button @click="addItem('education')" class="add-item-btn">
-                    <i class="fa-solid fa-plus mr-1"></i> Añadir Educación
-                </button>
+              <button @click="addItem('education')" class="add-item-btn">
+                <i class="fa-solid fa-plus mr-1"></i> Añadir Educación
+              </button>
             </li>
           </ul>
 
@@ -261,19 +311,28 @@
             Experiencia Laboral
           </h2>
           <ul class="space-y-2">
-            <li v-for="(item, index) in cvData.experience" :key="'exp-' + index"
+            <li
+              v-for="(item, index) in cvData.experience"
+              :key="'exp-' + index"
               class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
             >
               <span v-if="!editMode" v-html="item"></span>
               <template v-else>
-                <input type="text" v-model="cvData.experience[index]" class="edit-input">
-                <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('experience', index)"></i>
+                <input
+                  type="text"
+                  v-model="cvData.experience[index]"
+                  class="edit-input"
+                />
+                <i
+                  class="fa-solid fa-trash delete-item-btn"
+                  @click="removeItem('experience', index)"
+                ></i>
               </template>
             </li>
-             <li v-if="editMode">
-                <button @click="addItem('experience')" class="add-item-btn">
-                    <i class="fa-solid fa-plus mr-1"></i> Añadir Experiencia
-                </button>
+            <li v-if="editMode">
+              <button @click="addItem('experience')" class="add-item-btn">
+                <i class="fa-solid fa-plus mr-1"></i> Añadir Experiencia
+              </button>
             </li>
           </ul>
         </section>
@@ -287,19 +346,31 @@
             Habilidades Técnicas
           </h2>
           <ul class="space-y-4 mb-6">
-            <li v-for="(item, index) in cvData.technicalSkills" :key="'skill-' + index"
+            <li
+              v-for="(item, index) in cvData.technicalSkills"
+              :key="'skill-' + index"
               class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
             >
               <span v-if="!editMode" v-html="item"></span>
               <template v-else>
-                <textarea v-model="cvData.technicalSkills[index]" class="edit-textarea" rows="2"></textarea>
-                <i class="fa-solid fa-trash delete-item-btn" @click="removeItem('technicalSkills', index)"></i>
+                <textarea
+                  v-model="cvData.technicalSkills[index]"
+                  class="edit-textarea"
+                  rows="2"
+                ></textarea>
+                <i
+                  class="fa-solid fa-trash delete-item-btn"
+                  @click="removeItem('technicalSkills', index)"
+                ></i>
               </template>
             </li>
             <li v-if="editMode">
-                <button @click="addItem('technicalSkills', '<strong>Nueva Categoría:</strong> Habilidades...')" class="add-item-btn">
-                    <i class="fa-solid fa-plus mr-1"></i> Añadir Habilidad
-                </button>
+              <button
+                @click="addItem('technicalSkills', '<strong>Nueva Categoría:</strong> Habilidades...')"
+                class="add-item-btn"
+              >
+                <i class="fa-solid fa-plus mr-1"></i> Añadir Habilidad
+              </button>
             </li>
           </ul>
 
@@ -308,12 +379,18 @@
           >
             Disponibilidad
           </h2>
-          <p v-if="!editMode"
+          <p
+            v-if="!editMode"
             class="text-customText dark:text-dark-customText print:!text-black"
           >
             {{ cvData.availability }}
           </p>
-          <input v-else type="text" v-model="cvData.availability" class="edit-input">
+          <input
+            v-else
+            type="text"
+            v-model="cvData.availability"
+            class="edit-input"
+          />
         </section>
       </main>
 
@@ -368,13 +445,16 @@
           </div>
         </div>
 
+        <!-- Sección Redes Sociales -->
         <div class="flex-1 text-center">
           <h2
             class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
           >
             ¡Conectemos!
           </h2>
-          <div class="flex justify-center gap-4">
+
+          <!-- MODO VISTA: Iconos horizontales -->
+          <div v-if="!editMode" class="flex justify-center gap-4">
             <a
               :href="cvData.socialLinks.linkedin"
               target="_blank"
@@ -383,9 +463,6 @@
             >
               <i class="fa-brands fa-linkedin text-2xl"></i>
             </a>
-             <input v-if="editMode" type="url" v-model="cvData.socialLinks.linkedin" placeholder="LinkedIn URL" class="edit-input mt-1">
-
-
             <a
               :href="cvData.socialLinks.github"
               target="_blank"
@@ -394,8 +471,6 @@
             >
               <i class="fa-brands fa-github text-2xl"></i>
             </a>
-            <input v-if="editMode" type="url" v-model="cvData.socialLinks.github" placeholder="GitHub URL" class="edit-input mt-1">
-
             <a
               :href="cvData.socialLinks.twitter"
               target="_blank"
@@ -404,8 +479,6 @@
             >
               <i class="fa-brands fa-x-twitter text-2xl"></i>
             </a>
-            <input v-if="editMode" type="url" v-model="cvData.socialLinks.twitter" placeholder="X/Twitter URL" class="edit-input mt-1">
-
             <a
               :href="cvData.socialLinks.facebook"
               target="_blank"
@@ -414,12 +487,62 @@
             >
               <i class="fa-brands fa-facebook text-2xl"></i>
             </a>
-             <input v-if="editMode" type="url" v-model="cvData.socialLinks.facebook" placeholder="Facebook URL" class="edit-input mt-1">
           </div>
-           <div v-if="editMode" class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                Modifique las URLs de sus redes sociales arriba.
-                Los inputs de redes sociales aparecerán debajo de cada icono respectivamente.
+
+          <!-- MODO EDICIÓN: Inputs en bloque con iconos -->
+          <div v-else class="space-y-3 max-w-md mx-auto text-left">
+            <div class="flex items-center gap-3">
+              <i
+                class="fa-brands fa-linkedin w-6 text-center text-xl text-primary dark:text-dark-primary"
+              ></i>
+              <input
+                type="url"
+                v-model="cvData.socialLinks.linkedin"
+                placeholder="URL de LinkedIn"
+                class="edit-input flex-grow"
+              />
             </div>
+            <div class="flex items-center gap-3">
+              <i
+                class="fa-brands fa-github w-6 text-center text-xl text-primary dark:text-dark-primary"
+              ></i>
+              <input
+                type="url"
+                v-model="cvData.socialLinks.github"
+                placeholder="URL de GitHub"
+                class="edit-input flex-grow"
+              />
+            </div>
+            <div class="flex items-center gap-3">
+              <i
+                class="fa-brands fa-x-twitter w-6 text-center text-xl text-primary dark:text-dark-primary"
+              ></i>
+              <input
+                type="url"
+                v-model="cvData.socialLinks.twitter"
+                placeholder="URL de X/Twitter"
+                class="edit-input flex-grow"
+              />
+            </div>
+            <div class="flex items-center gap-3">
+              <i
+                class="fa-brands fa-facebook w-6 text-center text-xl text-primary dark:text-dark-primary"
+              ></i>
+              <input
+                type="url"
+                v-model="cvData.socialLinks.facebook"
+                placeholder="URL de Facebook"
+                class="edit-input flex-grow"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="editMode"
+            class="mt-3 text-xs text-gray-500 dark:text-gray-400 text-center"
+          >
+            Modifique las URLs de sus redes sociales.
+          </div>
         </div>
       </div>
     </div>
