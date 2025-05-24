@@ -83,7 +83,7 @@ Bajo los siguientes términos:
 
 ## 🔗 Links Útiles
 
-- [Página del Proyecto](https://samborski.github.io/curriculum)
+- [Página del Proyecto](https://samborski.github.io/cv-editor)
 - [Repositorio en GitHub](https://github.com/samborski/cv-editor)
 - [Reportar un Bug](https://github.com/samborski/cv-editor/issues)
 - [Solicitar una Característica](https://github.com/samborski/cv-editor/issues)
