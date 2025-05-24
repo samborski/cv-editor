@@ -61,17 +61,15 @@
       v-cloak
       class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg print:shadow-none print:p-0 print:!bg-white print:!text-black print-container"
     >
-      <cv-controls
-        :edit-mode="editMode"
-        :cv-data="cvData"
-        @toggle-edit="toggleEditMode"
-        @reset-data="resetData"
-        @toggle-dark-mode="toggleDarkMode"
-        @export-data="exportData"
-        @import-data="importData"
-        :vcf-link="cvData.vcfLink"
-      >
-      </cv-controls>
+        <cv-controls 
+            :edit-mode="editMode"
+            :cv-data-for-vcf="cvData"
+            @toggle-edit="toggleEditMode"
+            @reset-data="resetData"
+            @toggle-dark-mode="toggleDarkMode"
+            @export-data="exportData"
+            @import-data="importData">
+        </cv-controls>
 
       <cv-header :cv-data="cvData" :edit-mode="editMode"></cv-header>
 

@@ -1,6 +1,6 @@
 // js/components/CvControls.js
 const CvControls = {
-    props: ['editMode', 'vcfLink'],
+    props: ['editMode', 'cvDataForVcf'], // cvDataForVcf es para la generación del VCF
     emits: ['toggleEdit', 'resetData', 'toggleDarkMode', 'exportData', 'importData'],
     template: `
         <div class="relative">
@@ -21,11 +21,11 @@ const CvControls = {
                         title="Imprimir Currículum">
                         <i class="fa-solid fa-print text-lg"></i>
                     </button>
-                    <a :href="vcfLink" download
+                    <button @click="downloadVCF"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-                        title="Agregar a contactos">
+                        title="Agregar a contactos (VCF)">
                         <i class="fa-solid fa-address-card text-lg"></i>
-                    </a>
+                    </button>
                     <button @click="$emit('toggleDarkMode')"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
                         title="Cambiar tema claro/oscuro">
@@ -49,12 +49,38 @@ const CvControls = {
             const file = event.target.files[0];
             if (file) {
                 this.$emit('importData', file);
-                // Reset input para permitir re-importar el mismo archivo si es necesario
                 event.target.value = null; 
             }
         },
         triggerPrint() {
             window.print();
+        },
+        downloadVCF() {
+            if (!this.cvDataForVcf) {
+                console.error("Datos del CV (cvDataForVcf) no proporcionados al componente CvControls.");
+                alert("No se pudieron cargar los datos para generar el VCF.");
+                return;
+            }
+            // Verificar que Utils y Utils.generateVCF están definidos
+            if (typeof Utils === 'undefined' || typeof Utils.generateVCF !== 'function') {
+                console.error("Utils.generateVCF no está definido. Asegúrate de que utils.js se carga correctamente y antes que este componente.");
+                alert("Error interno al intentar generar VCF: función no encontrada.");
+                return;
+            }
+
+            const vcfContent = Utils.generateVCF(this.cvDataForVcf);
+            const dataUri = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcfContent);
+            
+            const nameForFile = this.cvDataForVcf.name ? this.cvDataForVcf.name.replace(/\s+/g, '_') : 'contacto';
+            const fileName = `${nameForFile}.vcf`;
+
+            let linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', fileName);
+            linkElement.style.display = 'none';
+            document.body.appendChild(linkElement);
+            linkElement.click();
+            document.body.removeChild(linkElement);
         }
     }
 };
