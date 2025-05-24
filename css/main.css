@@ -1,0 +1,73 @@
+/* Estilos del anterior style.css + nuevos */
+.edit-input {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  margin-bottom: 0.25rem;
+  background-color: white;
+  color: black;
+}
+.edit-input.inline-block {
+    display: inline-block;
+    width: auto;
+}
+.edit-input.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.edit-input.font-bold { font-weight: 700; }
+
+.edit-textarea {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  min-height: 80px;
+  background-color: white;
+  color: black;
+}
+
+.delete-item-btn {
+  margin-left: 8px;
+  color: #ef4444; /* Tailwind red-500 */
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+.delete-item-btn:hover { color: #dc2626; /* Tailwind red-600 */ }
+
+.add-item-btn {
+  display: inline-block;
+  padding: 4px 8px;
+  margin-top: 8px;
+  background-color: #3b82f6; /* Tailwind blue-500 */
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem; /* Tailwind text-sm */
+  transition: background-color 0.2s ease-in-out;
+}
+.add-item-btn:hover { background-color: #2563eb; /* Tailwind blue-600 */ }
+
+[v-cloak] { display: none; }
+
+/* Estilos para input con foco */
+.edit-input:focus, .edit-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #0077cc); /* Usar color primario de Tailwind */
+  box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.4); /* Sombra sutil */
+}
+
+/* Para el input de importación de archivo */
+#importFile {
+  display: none; /* Ocultar el input de archivo real */
+}
+.import-button { /* Estilo para el botón que dispara el click en el input de archivo */
+  /* Puedes usar clases de Tailwind aquí también si lo prefieres */
+  padding: 0.5rem 1rem;
+  background-color: #22c55e; /* green-500 */
+  color: white;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.import-button:hover {
+  background-color: #16a34a; /* green-600 */
+}

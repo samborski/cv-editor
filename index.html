@@ -1,24 +1,11 @@
 <!DOCTYPE html>
 <html lang="es" class="light">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Currículum de Daniel Gustavo Samborski" />
-    <meta
-      name="keywords"
-      content="currículum, Daniel Gustavo Samborski, desarrollador web, electricista"
-    />
-    <meta name="author" content="Daniel Gustavo Samborski" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="date" content="no" />
-    <meta name="url" content="no" />
-    <meta name="robots" content="index, follow" />
-    <title>Currículum de Daniel Gustavo Samborski</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
+    <title>Currículum Dinámico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -43,511 +30,93 @@
         },
       };
     </script>
-    <link rel="stylesheet" href="print.css" />
-    <link rel="stylesheet" href="style.css" />
-    <!-- Our new custom styles -->
-    <meta
-      property="og:title"
-      content="Currículum de Daniel Gustavo Samborski"
-    />
-    <meta
-      property="og:description"
-      content="Currículum de Daniel Gustavo Samborski - Desarrollador Web y Electricista"
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://samborski.github.io/curriculum" />
-    <meta property="og:image" content="foto-de-perfil.jpg" />
-    <meta name="twitter:card" content="summary" />
-    <meta
-      name="twitter:title"
-      content="Currículum de Daniel Gustavo Samborski"
-    />
-    <meta
-      name="twitter:description"
-      content="Currículum de Daniel Gustavo Samborski - Desarrollador Web y Electricista"
-    />
-    <meta name="twitter:image" content="foto-de-perfil.jpg" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="foto-de-perfil-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="foto-de-perfil-16x16.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="foto-de-perfil-180x180.png"
-    />
-  </head>
+    <link rel="stylesheet" href="css/print.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <!-- Metadatos (mantener los originales) -->
+    <meta name="description" content="Currículum de Daniel Gustavo Samborski" />
+    <meta name="keywords" content="currículum, Daniel Gustavo Samborski, desarrollador web, electricista"/>
+    <meta name="author" content="Daniel Gustavo Samborski" />
+    <meta property="og:title" content="Currículum de Daniel Gustavo Samborski"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="foto-de-perfil-32x32.png" />
+</head>
+<body class="bg-customBg dark:bg-dark-customBg text-customText dark:text-dark-customText font-sans print:text-[11px] print:!bg-white print:!text-black">
 
-  <body
-    class="bg-customBg dark:bg-dark-customBg text-customText dark:text-dark-customText font-sans print:text-[11px] print:!bg-white print:!text-black"
-  >
-    <div
-      id="app"
-      v-cloak
-      class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg print:shadow-none print:p-0 print:!bg-white print:!text-black print-container"
-    >
-      <div class="relative">
-        <div id="botones" class="absolute top-0 right-0 print:hidden">
-          <div class="flex gap-2">
-            <button
-              @click="toggleEditMode"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              :title="editMode ? 'Ver CV' : 'Editar CV'"
-            >
-              <i class="fa-solid" :class="editMode ? 'fa-eye' : 'fa-edit'"></i>
-            </button>
-            <button
-              v-if="editMode"
-              @click="resetData"
-              class="p-2 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-700 rounded-full transition-colors"
-              title="Restaurar datos por defecto"
-            >
-              <i class="fa-solid fa-undo"></i>
-            </button>
-            <button
-              onclick="window.print()"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Imprimir Currículum"
-            >
-              <i class="fa-solid fa-print text-lg"></i>
-            </button>
-            <a
-              :href="cvData.vcfLink"
-              download
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Agregar a contactos"
-            >
-              <i class="fa-solid fa-address-card text-lg"></i>
-            </a>
-            <button
-              @click="toggleDarkMode"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Cambiar tema claro/oscuro"
-            >
-              <i class="fa-solid fa-circle-half-stroke text-lg"></i>
-            </button>
-          </div>
+    <div id="app" v-cloak class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg print:shadow-none print:p-0 print:!bg-white print:!text-black print-container">
+        
+        <cv-controls 
+            :edit-mode="editMode"
+            :cv-data="cvData"
+            @toggle-edit="toggleEditMode"
+            @reset-data="resetData"
+            @toggle-dark-mode="toggleDarkMode"
+            @export-data="exportData"
+            @import-data="importData"
+            :vcf-link="cvData.vcfLink">
+        </cv-controls>
+
+        <cv-header :cv-data="cvData" :edit-mode="editMode"></cv-header>
+
+        <main class="flex flex-col md:flex-row print:flex-row gap-6 print:gap-4">
+            <section class="flex-[2] bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 print:p-2 print:border-0 print:!bg-white print:!text-black">
+                <cv-professional-profile :profile="cvData.professionalProfile" :edit-mode="editMode" @update:profile="cvData.professionalProfile = $event"></cv-professional-profile>
+                
+                <cv-section-list 
+                    title="Educación"
+                    :items="cvData.education"
+                    :edit-mode="editMode"
+                    item-structure-type="education"
+                    @update:items="cvData.education = $event">
+                </cv-section-list>
+
+                <cv-section-list 
+                    title="Experiencia Laboral"
+                    :items="cvData.experience"
+                    :edit-mode="editMode"
+                    item-structure-type="experience"
+                    @update:items="cvData.experience = $event">
+                </cv-section-list>
+            </section>
+
+            <section class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 print:p-2 print:border-0 print:!bg-white print:!text-black">
+                <cv-section-list 
+                    title="Habilidades Técnicas"
+                    :items="cvData.technicalSkills"
+                    :edit-mode="editMode"
+                    item-structure-type="simple"
+                    @update:items="cvData.technicalSkills = $event">
+                </cv-section-list>
+
+                <h2 class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black">Disponibilidad</h2>
+                <p v-if="!editMode" class="text-customText dark:text-dark-customText print:!text-black">{{ cvData.availability }}</p>
+                <input v-else type="text" v-model="cvData.availability" class="edit-input">
+            </section>
+        </main>
+
+        <div class="w-full print:hidden mt-6 flex flex-col md:flex-row gap-6">
+            <!-- Sección Compartir Currículum (mantener como estaba, pero usando cvData.name y cvData.websiteUrl) -->
+            <div class="flex-1 text-center">
+              <h2 class="text-primary dark:text-dark-primary text-xl font-bold mb-4">¡Difunde mi Perfil!</h2>
+              <div class="flex justify-center gap-4">
+                <a :href="'https://www.facebook.com/sharer/sharer.php?u=' + encodedWebsiteUrl" target="_blank" class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors" title="Compartir en Facebook"><i class="fa-brands fa-facebook text-2xl"></i></a>
+                <a :href="'https://x.com/intent/tweet?url=' + encodedWebsiteUrl + '&text=' + encodedShareText" target="_blank" class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors" title="Compartir en X"><i class="fa-brands fa-x-twitter text-2xl"></i></a>
+                <a :href="'https://www.linkedin.com/shareArticle?mini=true&url=' + encodedWebsiteUrl + '&title=' + encodedShareTitle + '&summary=' + encodedShareSummary" target="_blank" class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors" title="Compartir en LinkedIn"><i class="fa-brands fa-linkedin text-2xl"></i></a>
+                <a :href="'https://api.whatsapp.com/send?text=' + encodedShareText + ': ' + encodedWebsiteUrl" target="_blank" class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors" title="Compartir por WhatsApp"><i class="fa-brands fa-whatsapp text-2xl"></i></a>
+                <a :href="'https://t.me/share/url?url=' + encodedWebsiteUrl + '&text=' + encodedShareText" target="_blank" class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors" title="Compartir por Telegram"><i class="fa-brands fa-telegram text-2xl"></i></a>
+              </div>
+            </div>
+
+            <cv-social-links :social-links="cvData.socialLinks" :edit-mode="editMode" @update:social-links="cvData.socialLinks = $event"></cv-social-links>
         </div>
-        <header
-          class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white"
-        >
-          <div class="flex-shrink-0 mb-5 md:mb-0 print:mb-0 md:mr-5 print:mr-5">
-            <img
-              :src="cvData.profilePicture"
-              alt="Foto de perfil"
-              class="w-32 max-w-[150px] min-w-[80px] print:w-28 rounded-full object-cover border-2 border-primary print:!border-black shadow"
-            />
-            <input
-              v-if="editMode"
-              type="text"
-              v-model="cvData.profilePicture"
-              placeholder="URL de la foto de perfil"
-              class="edit-input mt-2"
-            />
-          </div>
-          <div
-            class="flex-1 text-center md:text-left print:text-left space-y-2"
-          >
-            <h1
-              class="text-primary dark:text-dark-primary text-2xl md:text-3xl font-bold print:!text-black print:!mb-2"
-            >
-              <span v-if="!editMode">{{ cvData.name }}</span>
-              <input
-                v-else
-                type="text"
-                v-model="cvData.name"
-                class="edit-input text-2xl md:text-3xl font-bold"
-              />
-            </h1>
-            <p class="print:!text-black">
-              <i
-                class="fa-solid fa-envelope text-lightText dark:text-dark-lightText mr-2 print:!text-black"
-              ></i>
-              <a
-                :href="'mailto:' + cvData.email"
-                class="text-primary dark:text-dark-primary hover:underline print:!text-black"
-                ><span v-if="!editMode">{{ cvData.email }}</span>
-                <input
-                  v-else
-                  type="email"
-                  v-model="cvData.email"
-                  class="edit-input inline-block w-auto"
-                />
-              </a>
-              |
-              <i
-                class="fa-solid fa-phone text-lightText dark:text-dark-lightText mx-2 print:!text-black"
-              ></i>
-              <span v-if="!editMode">{{ cvData.phone }}</span>
-              <input
-                v-else
-                type="tel"
-                v-model="cvData.phone"
-                class="edit-input inline-block w-auto"
-              />
-              <a
-                :href="'https://api.whatsapp.com/send?phone=' + cvData.phone.replace(/\s+/g, '')"
-                target="_blank"
-                class="text-primary dark:text-dark-primary hover:text-green-500 dark:hover:text-green-400 ml-2 print:hidden"
-                title="Iniciar chat en WhatsApp"
-              >
-                <i class="fa-brands fa-whatsapp"></i>
-              </a>
-            </p>
-            <p class="print:!text-black">
-              <i
-                class="fa-solid fa-globe text-lightText dark:text-dark-lightText mr-2 print:!text-black"
-              ></i>
-              <a
-                :href="cvData.websiteUrl"
-                target="_blank"
-                class="text-primary dark:text-dark-primary hover:underline print:!text-black"
-                ><span v-if="!editMode">{{ cvData.websiteDisplay }}</span>
-                <input
-                  v-else
-                  type="text"
-                  v-model="cvData.websiteDisplay"
-                  placeholder="Texto a mostrar (website)"
-                  class="edit-input inline-block w-auto mr-1"
-                />
-                <input
-                  v-if="editMode"
-                  type="url"
-                  v-model="cvData.websiteUrl"
-                  placeholder="URL del website"
-                  class="edit-input inline-block w-auto"
-                />
-              </a>
-            </p>
-            <p class="print:!text-black">
-              <i
-                class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black"
-              ></i>
-              <span v-if="!editMode">{{ cvData.address }}</span>
-              <input
-                v-else
-                type="text"
-                v-model="cvData.address"
-                class="edit-input"
-              />
-            </p>
-            <p class="print:!text-black">
-              <i
-                class="fa-solid fa-cake-candles text-lightText dark:text-dark-lightText mr-2 print:!text-black"
-              ></i>
-              <span v-if="!editMode">{{ cvData.birthdate }}</span>
-              <input
-                v-else
-                type="text"
-                v-model="cvData.birthdate"
-                class="edit-input"
-              />
-            </p>
-          </div>
-        </header>
-      </div>
-      <main class="flex flex-col md:flex-row print:flex-row gap-6 print:gap-4">
-        <section
-          class="flex-[2] bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 print:p-2 print:border-0 print:!bg-white print:!text-black"
-        >
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black"
-          >
-            Perfil Profesional
-          </h2>
-          <p
-            v-if="!editMode"
-            class="mb-6 text-customText dark:text-dark-customText print:!text-black"
-            v-html="cvData.professionalProfile.replace(/\n/g, '<br />')"
-          ></p>
-          <textarea
-            v-else
-            v-model="cvData.professionalProfile"
-            class="edit-textarea mb-6"
-          ></textarea>
-
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
-          >
-            Educación
-          </h2>
-          <ul class="space-y-2 mb-6">
-            <li
-              v-for="(item, index) in cvData.education"
-              :key="'edu-' + index"
-              class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
-            >
-              <span v-if="!editMode" v-html="item"></span>
-              <template v-else>
-                <input
-                  type="text"
-                  v-model="cvData.education[index]"
-                  class="edit-input"
-                />
-                <i
-                  class="fa-solid fa-trash delete-item-btn"
-                  @click="removeItem('education', index)"
-                ></i>
-              </template>
-            </li>
-            <li v-if="editMode">
-              <button @click="addItem('education')" class="add-item-btn">
-                <i class="fa-solid fa-plus mr-1"></i> Añadir Educación
-              </button>
-            </li>
-          </ul>
-
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
-          >
-            Experiencia Laboral
-          </h2>
-          <ul class="space-y-2">
-            <li
-              v-for="(item, index) in cvData.experience"
-              :key="'exp-' + index"
-              class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
-            >
-              <span v-if="!editMode" v-html="item"></span>
-              <template v-else>
-                <input
-                  type="text"
-                  v-model="cvData.experience[index]"
-                  class="edit-input"
-                />
-                <i
-                  class="fa-solid fa-trash delete-item-btn"
-                  @click="removeItem('experience', index)"
-                ></i>
-              </template>
-            </li>
-            <li v-if="editMode">
-              <button @click="addItem('experience')" class="add-item-btn">
-                <i class="fa-solid fa-plus mr-1"></i> Añadir Experiencia
-              </button>
-            </li>
-          </ul>
-        </section>
-
-        <section
-          class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700 print:p-2 print:border-0 print:!bg-white print:!text-black"
-        >
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black"
-          >
-            Habilidades Técnicas
-          </h2>
-          <ul class="space-y-4 mb-6">
-            <li
-              v-for="(item, index) in cvData.technicalSkills"
-              :key="'skill-' + index"
-              class="hover:bg-secondary dark:hover:bg-dark-secondary hover:pl-2 transition-all duration-300"
-            >
-              <span v-if="!editMode" v-html="item"></span>
-              <template v-else>
-                <textarea
-                  v-model="cvData.technicalSkills[index]"
-                  class="edit-textarea"
-                  rows="2"
-                ></textarea>
-                <i
-                  class="fa-solid fa-trash delete-item-btn"
-                  @click="removeItem('technicalSkills', index)"
-                ></i>
-              </template>
-            </li>
-            <li v-if="editMode">
-              <button
-                @click="addItem('technicalSkills', '<strong>Nueva Categoría:</strong> Habilidades...')"
-                class="add-item-btn"
-              >
-                <i class="fa-solid fa-plus mr-1"></i> Añadir Habilidad
-              </button>
-            </li>
-          </ul>
-
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4 print:!text-black"
-          >
-            Disponibilidad
-          </h2>
-          <p
-            v-if="!editMode"
-            class="text-customText dark:text-dark-customText print:!text-black"
-          >
-            {{ cvData.availability }}
-          </p>
-          <input
-            v-else
-            type="text"
-            v-model="cvData.availability"
-            class="edit-input"
-          />
-        </section>
-      </main>
-
-      <div class="w-full print:hidden mt-6 flex flex-col md:flex-row gap-6">
-        <div class="flex-1 text-center">
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
-          >
-            ¡Difunde mi Perfil!
-          </h2>
-          <div class="flex justify-center gap-4">
-            <a
-              :href="'https://www.facebook.com/sharer/sharer.php?u=' + encodedWebsiteUrl"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Compartir en Facebook"
-            >
-              <i class="fa-brands fa-facebook text-2xl"></i>
-            </a>
-            <a
-              :href="'https://x.com/intent/tweet?url=' + encodedWebsiteUrl + '&text=' + encodedShareText"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Compartir en X"
-            >
-              <i class="fa-brands fa-x-twitter text-2xl"></i>
-            </a>
-            <a
-              :href="'https://www.linkedin.com/shareArticle?mini=true&url=' + encodedWebsiteUrl + '&title=' + encodedShareTitle + '&summary=' + encodedShareSummary"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Compartir en LinkedIn"
-            >
-              <i class="fa-brands fa-linkedin text-2xl"></i>
-            </a>
-            <a
-              :href="'https://api.whatsapp.com/send?text=' + encodedShareText + ': ' + encodedWebsiteUrl"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Compartir por WhatsApp"
-            >
-              <i class="fa-brands fa-whatsapp text-2xl"></i>
-            </a>
-            <a
-              :href="'https://t.me/share/url?url=' + encodedWebsiteUrl + '&text=' + encodedShareText"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Compartir por Telegram"
-            >
-              <i class="fa-brands fa-telegram text-2xl"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Sección Redes Sociales -->
-        <div class="flex-1 text-center">
-          <h2
-            class="text-primary dark:text-dark-primary text-xl font-bold mb-4"
-          >
-            ¡Conectemos!
-          </h2>
-
-          <!-- MODO VISTA: Iconos horizontales -->
-          <div v-if="!editMode" class="flex justify-center gap-4">
-            <a
-              :href="cvData.socialLinks.linkedin"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Perfil de LinkedIn"
-            >
-              <i class="fa-brands fa-linkedin text-2xl"></i>
-            </a>
-            <a
-              :href="cvData.socialLinks.github"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Perfil de GitHub"
-            >
-              <i class="fa-brands fa-github text-2xl"></i>
-            </a>
-            <a
-              :href="cvData.socialLinks.twitter"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Perfil de X"
-            >
-              <i class="fa-brands fa-x-twitter text-2xl"></i>
-            </a>
-            <a
-              :href="cvData.socialLinks.facebook"
-              target="_blank"
-              class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-              title="Perfil de Facebook"
-            >
-              <i class="fa-brands fa-facebook text-2xl"></i>
-            </a>
-          </div>
-
-          <!-- MODO EDICIÓN: Inputs en bloque con iconos -->
-          <div v-else class="space-y-3 max-w-md mx-auto text-left">
-            <div class="flex items-center gap-3">
-              <i
-                class="fa-brands fa-linkedin w-6 text-center text-xl text-primary dark:text-dark-primary"
-              ></i>
-              <input
-                type="url"
-                v-model="cvData.socialLinks.linkedin"
-                placeholder="URL de LinkedIn"
-                class="edit-input flex-grow"
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <i
-                class="fa-brands fa-github w-6 text-center text-xl text-primary dark:text-dark-primary"
-              ></i>
-              <input
-                type="url"
-                v-model="cvData.socialLinks.github"
-                placeholder="URL de GitHub"
-                class="edit-input flex-grow"
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <i
-                class="fa-brands fa-x-twitter w-6 text-center text-xl text-primary dark:text-dark-primary"
-              ></i>
-              <input
-                type="url"
-                v-model="cvData.socialLinks.twitter"
-                placeholder="URL de X/Twitter"
-                class="edit-input flex-grow"
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <i
-                class="fa-brands fa-facebook w-6 text-center text-xl text-primary dark:text-dark-primary"
-              ></i>
-              <input
-                type="url"
-                v-model="cvData.socialLinks.facebook"
-                placeholder="URL de Facebook"
-                class="edit-input flex-grow"
-              />
-            </div>
-          </div>
-
-          <div
-            v-if="editMode"
-            class="mt-3 text-xs text-gray-500 dark:text-gray-400 text-center"
-          >
-            Modifique las URLs de sus redes sociales.
-          </div>
-        </div>
-      </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-    <script src="script.js" defer></script>
-  </body>
+    <script src="js/utils.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/components/CvControls.js"></script>
+    <script src="js/components/CvHeader.js"></script>
+    <script src="js/components/CvProfessionalProfile.js"></script>
+    <script src="js/components/CvSectionList.js"></script>
+    <script src="js/components/CvSocialLinks.js"></script>
+    <script src="js/app.js" defer></script>
+</body>
 </html>
