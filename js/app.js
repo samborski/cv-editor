@@ -3,9 +3,11 @@ const app = Vue.createApp({
     data() {
         return {
             editMode: false,
-            cvData: CVDataStore.load() // Carga inicial desde el store
+            cvData: CVDataStore.load(),
+            saveStatus: '' // Nueva propiedad para el feedback de guardado
         };
     },
+    // ... (computed sin cambios) ...
     computed: {
         encodedWebsiteUrl() {
             return Utils.encodeUrl(this.cvData.websiteUrl);
@@ -21,13 +23,15 @@ const app = Vue.createApp({
         }
     },
     methods: {
+        // ... (otros métodos como toggleEditMode, resetData, etc. sin cambios) ...
         toggleEditMode() {
             this.editMode = !this.editMode;
         },
         resetData() {
             if (confirm('¿Estás seguro de que quieres restaurar los datos por defecto? Todos los cambios locales se perderán.')) {
                 this.cvData = CVDataStore.deepClone(CVDataStore.getDefaultData());
-                // El watcher guardará automáticamente
+                this.saveStatus = 'Datos restaurados.'; // Feedback inmediato
+                setTimeout(() => this.saveStatus = '', 2000);
             }
         },
         toggleDarkMode() {
@@ -63,11 +67,10 @@ const app = Vue.createApp({
             reader.onload = (e) => {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    // Aquí podrías añadir validación del schema importado
                     if (confirm("¿Estás seguro de que quieres importar estos datos? Se sobrescribirán los datos actuales.")) {
                         this.cvData = CVDataStore.deepMerge(CVDataStore.getDefaultData(), importedData);
-                         // El watcher guardará automáticamente
-                        alert("Datos importados correctamente.");
+                        this.saveStatus = 'Datos importados y guardados.'; // Feedback
+                        setTimeout(() => this.saveStatus = '', 3000);
                     }
                 } catch (error) {
                     alert("Error al importar el archivo. Asegúrate de que es un JSON válido con el formato esperado.");
@@ -79,19 +82,42 @@ const app = Vue.createApp({
     },
     watch: {
         cvData: {
-            handler(newData) {
-                CVDataStore.save(newData);
+            handler(newData, oldData) {
+                // Evitar el spam de "Guardando..." en la carga inicial si oldData no está definido
+                if (oldData && Object.keys(oldData).length > 0) { 
+                    this.saveStatus = 'Guardando...';
+                    CVDataStore.save(newData);
+                    // Usamos un debounce improvisado para el mensaje "Guardado"
+                    // Si hay múltiples cambios rápidos, solo el último mostrará "Guardado"
+                    if (this.saveTimeout) {
+                        clearTimeout(this.saveTimeout);
+                    }
+                    this.saveTimeout = setTimeout(() => {
+                        this.saveStatus = 'Guardado ✓';
+                        setTimeout(() => {
+                            // Solo limpiar si sigue siendo "Guardado ✓" (para no sobreescribir "Guardando...")
+                            if (this.saveStatus === 'Guardado ✓') {
+                                this.saveStatus = '';
+                            }
+                        }, 2000); // Tiempo que se muestra "Guardado ✓"
+                    }, 700); // Tiempo de espera antes de mostrar "Guardado ✓"
+                } else if (!oldData || Object.keys(oldData).length === 0) {
+                    // Primera carga, simplemente guardar sin feedback de "Guardando..."
+                    // o si es la primera vez que se setea cvData desde el load.
+                    CVDataStore.save(newData);
+                }
             },
             deep: true,
         },
     },
     created() {
         this.applyInitialTheme();
-        // cvData ya se carga en la declaración de data
+        this.saveTimeout = null; // Inicializar saveTimeout
+        // cvData ya se carga en la declaración de data, el watcher se encargará del primer guardado.
     }
 });
 
-// Registrar componentes
+// ... (registro de componentes y app.mount sin cambios)
 app.component('cv-controls', CvControls);
 app.component('cv-header', CvHeader);
 app.component('cv-professional-profile', CvProfessionalProfile);

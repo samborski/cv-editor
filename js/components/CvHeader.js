@@ -1,7 +1,10 @@
 // js/components/CvHeader.js
 const CvHeader = {
-    // ... (props, data, watch sin cambios)
     props: ['cvData', 'editMode'],
+    emits: [ // Declarar los eventos que el componente puede emitir (buenas prácticas)
+        'update:cvDataName', // Asumiendo que actualizas cvData.name directamente en el padre
+        // O podrías emitir un evento más general como 'updateField' con el nombre del campo y el valor
+    ],
     data() {
         return {
             emailError: ''
@@ -16,30 +19,68 @@ const CvHeader = {
             }
         }
     },
+    methods: {
+        clearField(fieldName) {
+            // Esta es una forma directa si cvData es un objeto reactivo pasado como prop
+            // y el padre (app.js) está preparado para que sus propiedades internas cambien.
+            // Vue 3 maneja esto bien para objetos y arrays pasados como props.
+            // Sin embargo, la forma MÁS correcta si quisieras una encapsulación estricta sería
+            // emitir un evento para que el padre actualice el campo.
+            // Por simplicidad y dado que cvData es reactivo, esto funcionará.
+            if (this.cvData.hasOwnProperty(fieldName)) {
+                this.cvData[fieldName] = '';
+            }
+            // Ejemplo si quisieras emitir (requeriría manejo en app.js):
+            // this.$emit('updateField', { field: fieldName, value: '' });
+        },
+        // Método para actualizar el nombre (si decides usar @input en lugar de v-model)
+        updateName(event) {
+            // Si no usas v-model directamente en el input del template
+            // this.cvData.name = event.target.value;
+            // O, si cvData.name no fuera directamente modificable (raro con objetos en Vue 3):
+            // this.$emit('update:cvDataName', event.target.value);
+        }
+    },
     template: `
     <header class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white mt-16 print:mt-0">
         <div class="flex-shrink-0 mb-5 md:mb-0 print:mb-0 md:mr-5 print:mr-5">
             <img :src="cvData.profilePicture" alt="Foto de perfil"
                  class="w-32 max-w-[150px] min-w-[80px] print:w-28 rounded-full object-cover border-2 border-primary print:!border-black shadow" />
-            <input v-if="editMode" type="text" v-model="cvData.profilePicture" placeholder="URL foto de perfil" class="edit-input mt-2">
+            <div v-if="editMode" class="relative mt-2">
+                <input type="text" v-model="cvData.profilePicture" placeholder="URL foto de perfil" class="edit-input pr-7">
+                <i v-if="cvData.profilePicture" 
+                   @click="clearField('profilePicture')" 
+                   class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-2 top-1/2 -translate-y-1/2"></i>
+            </div>
         </div>
         <div class="flex-1 text-center md:text-left print:text-left space-y-2">
             <h1 class="text-primary dark:text-dark-primary text-2xl md:text-3xl font-bold print:!text-black print:!mb-2">
                 <span v-if="!editMode">{{ cvData.name }}</span>
-                <input v-else type="text" v-model="cvData.name" class="edit-input text-2xl md:text-3xl font-bold">
+                <div v-else class="relative">
+                    <input type="text" v-model="cvData.name" class="edit-input text-2xl md:text-3xl font-bold pr-8">
+                    <i v-if="cvData.name" 
+                       @click="clearField('name')" 
+                       class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-2 top-1/2 -translate-y-1/2 text-base"></i>
+                </div>
             </h1>
             <p class="print:!text-black">
                 <i class="fa-solid fa-envelope text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
                 <a :href="'mailto:' + cvData.email" class="text-primary dark:text-dark-primary hover:underline print:!text-black">
                     <span v-if="!editMode">{{ cvData.email }}</span>
-                    <input v-else type="email" v-model="cvData.email" class="edit-input inline-block w-auto">
+                    <span v-else class="relative inline-block">
+                        <input type="email" v-model="cvData.email" class="edit-input inline-block w-auto pr-7">
+                        <i v-if="cvData.email" @click="clearField('email')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                    </span>
                 </a>
                 <span v-if="editMode && emailError" class="text-red-500 text-xs ml-2">{{ emailError }}</span>
                 |
                 <i class="fa-solid fa-phone text-lightText dark:text-dark-lightText mx-2 print:!text-black"></i>
                 <span v-if="!editMode">{{ cvData.phone }}</span>
-                <input v-else type="tel" v-model="cvData.phone" class="edit-input inline-block w-auto">
-                <a :href="'https://api.whatsapp.com/send?phone=' + cvData.phone.replace(/\\s+/g, '')" target="_blank"
+                <span v-else class="relative inline-block">
+                    <input type="tel" v-model="cvData.phone" class="edit-input inline-block w-auto pr-7">
+                    <i v-if="cvData.phone" @click="clearField('phone')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                </span>
+                <a :href="'https://api.whatsapp.com/send?phone=' + (cvData.phone || '').replace(/\\s+/g, '')" target="_blank"
                    class="text-primary dark:text-dark-primary hover:text-green-500 dark:hover:text-green-400 ml-2 print:hidden" title="WhatsApp">
                     <i class="fa-brands fa-whatsapp"></i>
                 </a>
@@ -49,20 +90,32 @@ const CvHeader = {
                 <a :href="cvData.websiteUrl" target="_blank" class="text-primary dark:text-dark-primary hover:underline print:!text-black">
                     <span v-if="!editMode">{{ cvData.websiteDisplay }}</span>
                     <template v-else>
-                        <input type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar" class="edit-input inline-block w-auto mr-1">
-                        <input type="url" v-model="cvData.websiteUrl" placeholder="URL del website" class="edit-input inline-block w-auto">
+                        <span class="relative inline-block mr-1">
+                            <input type="text" v-model="cvData.websiteDisplay" placeholder="Texto a mostrar" class="edit-input inline-block w-auto pr-7">
+                            <i v-if="cvData.websiteDisplay" @click="clearField('websiteDisplay')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                        </span>
+                        <span class="relative inline-block">
+                            <input type="url" v-model="cvData.websiteUrl" placeholder="URL del website" class="edit-input inline-block w-auto pr-7">
+                             <i v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-1.5 top-1/2 -translate-y-1/2 text-sm"></i>
+                        </span>
                     </template>
                 </a>
             </p>
             <p class="print:!text-black">
                 <i class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
                 <span v-if="!editMode">{{ cvData.address }}</span>
-                <input v-else type="text" v-model="cvData.address" class="edit-input">
+                <span v-else class="relative block">
+                    <input type="text" v-model="cvData.address" class="edit-input pr-7">
+                    <i v-if="cvData.address" @click="clearField('address')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-2 top-1/2 -translate-y-1/2"></i>
+                </span>
             </p>
             <p class="print:!text-black">
                 <i class="fa-solid fa-cake-candles text-lightText dark:text-dark-lightText mr-2 print:!text-black"></i>
                 <span v-if="!editMode">{{ cvData.birthdate }}</span>
-                <input v-else type="text" v-model="cvData.birthdate" class="edit-input">
+                 <span v-else class="relative block">
+                    <input type="text" v-model="cvData.birthdate" class="edit-input pr-7">
+                    <i v-if="cvData.birthdate" @click="clearField('birthdate')" class="fa-solid fa-times-circle cursor-pointer text-gray-400 hover:text-red-500 absolute right-2 top-1/2 -translate-y-1/2"></i>
+                </span>
             </p>
         </div>
     </header>

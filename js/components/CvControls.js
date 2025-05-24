@@ -1,11 +1,30 @@
 // js/components/CvControls.js
 const CvControls = {
-    props: ['editMode', 'cvDataForVcf'], // cvDataForVcf es para la generación del VCF
-    emits: ['toggleEdit', 'resetData', 'toggleDarkMode', 'exportData', 'importData'],
-    template: `
+  props: ['editMode', 'cvDataForVcf', 'saveStatus'], // Añadida prop saveStatus
+  emits: [
+    'toggleEdit',
+    'resetData',
+    'toggleDarkMode',
+    'exportData',
+    'importData',
+  ],
+  template: `
         <div class="relative">
             <div id="botones" class="absolute top-0 right-0 print:hidden z-10">
-                <div class="flex gap-2 p-2 bg-white dark:bg-gray-800 rounded-bl-lg shadow">
+                <div class="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded-bl-lg shadow">
+                    
+                    <!-- Feedback de Guardado -->
+                    <span v-if="saveStatus" 
+                          class="text-xs px-2 transition-opacity duration-300"
+                          :class="{
+                            'text-blue-600 dark:text-blue-400': saveStatus === 'Guardando...',
+                            'text-green-600 dark:text-green-400': saveStatus.includes('Guardado') || saveStatus.includes('importados') || saveStatus.includes('restaurados'),
+                            'opacity-100': saveStatus,
+                            'opacity-0': !saveStatus
+                          }">
+                        {{ saveStatus }}
+                    </span>
+
                     <button @click="$emit('toggleEdit')"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
                         :title="editMode ? 'Ver CV' : 'Editar CV'">
@@ -44,43 +63,53 @@ const CvControls = {
             </div>
         </div>
     `,
-    methods: {
-        handleImportFile(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.$emit('importData', file);
-                event.target.value = null; 
-            }
-        },
-        triggerPrint() {
-            window.print();
-        },
-        downloadVCF() {
-            if (!this.cvDataForVcf) {
-                console.error("Datos del CV (cvDataForVcf) no proporcionados al componente CvControls.");
-                alert("No se pudieron cargar los datos para generar el VCF.");
-                return;
-            }
-            // Verificar que Utils y Utils.generateVCF están definidos
-            if (typeof Utils === 'undefined' || typeof Utils.generateVCF !== 'function') {
-                console.error("Utils.generateVCF no está definido. Asegúrate de que utils.js se carga correctamente y antes que este componente.");
-                alert("Error interno al intentar generar VCF: función no encontrada.");
-                return;
-            }
+  // ... (methods sin cambios)
+  methods: {
+    handleImportFile(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.$emit('importData', file);
+        event.target.value = null;
+      }
+    },
+    triggerPrint() {
+      window.print();
+    },
+    downloadVCF() {
+      if (!this.cvDataForVcf) {
+        console.error(
+          'Datos del CV (cvDataForVcf) no proporcionados al componente CvControls.'
+        );
+        alert('No se pudieron cargar los datos para generar el VCF.');
+        return;
+      }
+      if (
+        typeof Utils === 'undefined' ||
+        typeof Utils.generateVCF !== 'function'
+      ) {
+        console.error(
+          'Utils.generateVCF no está definido. Asegúrate de que utils.js se carga correctamente y antes que este componente.'
+        );
+        alert('Error interno al intentar generar VCF: función no encontrada.');
+        return;
+      }
 
-            const vcfContent = Utils.generateVCF(this.cvDataForVcf);
-            const dataUri = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcfContent);
-            
-            const nameForFile = this.cvDataForVcf.name ? this.cvDataForVcf.name.replace(/\s+/g, '_') : 'contacto';
-            const fileName = `${nameForFile}.vcf`;
+      const vcfContent = Utils.generateVCF(this.cvDataForVcf);
+      const dataUri =
+        'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcfContent);
 
-            let linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', fileName);
-            linkElement.style.display = 'none';
-            document.body.appendChild(linkElement);
-            linkElement.click();
-            document.body.removeChild(linkElement);
-        }
-    }
+      const nameForFile = this.cvDataForVcf.name
+        ? this.cvDataForVcf.name.replace(/\s+/g, '_')
+        : 'contacto';
+      const fileName = `${nameForFile}.vcf`;
+
+      let linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', fileName);
+      linkElement.style.display = 'none';
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+    },
+  },
 };
