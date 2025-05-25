@@ -1,6 +1,6 @@
 # CV Editor 📝
 
-...¡Hola! Este es un editor de currículum vitae web que te permite crear y personalizar tu CV de manera sencilla e intuitiva.
+¡Hola! Este es un editor de currículum vitae web que te permite crear y personalizar tu CV de manera sencilla e intuitiva.
 
 [Ver demo en vivo](https://samborski.github.io/cv-editor/)
 
