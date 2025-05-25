@@ -4,6 +4,8 @@
 
 [Ver demo en vivo](https://samborski.github.io/cv-editor/)
 
+[Wiki](https://github.com/samborski/cv-editor/wiki/)
+
 ## 🌟 Características
 
 - ✨ Interfaz moderna y fácil de usar
