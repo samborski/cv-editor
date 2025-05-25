@@ -189,6 +189,21 @@
           @update:social-links="cvData.socialLinks = $event"
         ></cv-social-links>
       </div>
+
+      <footer class="w-full print:hidden mt-10 pt-6 border-t border-gray-300 dark:border-gray-700 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+          <a :href="cvData.wikiSupportLink" target="_blank" rel="noopener noreferrer"
+             class="text-primary dark:text-dark-primary hover:underline font-semibold inline-flex items-center gap-1">
+            <i class="fa-solid fa-heart text-red-500"></i>
+            <span>Apoya este Proyecto</span>
+          </a>
+        </p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          Creado por Daniel Samborski.
+          <a :href="'https://github.com/samborski/cv-editor'" target="_blank" rel="noopener noreferrer" class="hover:underline text-primary dark:text-dark-primary">Ver en GitHub</a>.
+        </p>
+      </footer>
+
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>

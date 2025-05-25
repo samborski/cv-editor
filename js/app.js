@@ -3,11 +3,10 @@ const app = Vue.createApp({
   data() {
     return {
       editMode: false,
-      cvData: CVDataStore.load(),
-      saveStatus: '', // Nueva propiedad para el feedback de guardado
+      cvData: CVDataStore.load(), // cvData ahora incluirá wikiSupportLink
+      saveStatus: '',
     };
   },
-  // ... (computed sin cambios) ...
   computed: {
     encodedWebsiteUrl() {
       return Utils.encodeUrl(this.cvData.websiteUrl);
@@ -23,13 +22,10 @@ const app = Vue.createApp({
     },
   },
   methods: {
-    // ... (otros métodos como toggleEditMode, resetData, etc. sin cambios) ...
     toggleEditMode() {
-      // Para el botón principal de CvControls
       this.editMode = !this.editMode;
     },
     setEditModeGlobally(value) {
-      // Para los clics en los campos
       this.editMode = Boolean(value);
     },
     resetData() {
@@ -39,7 +35,7 @@ const app = Vue.createApp({
         )
       ) {
         this.cvData = CVDataStore.deepClone(CVDataStore.getDefaultData());
-        this.saveStatus = 'Datos restaurados.'; // Feedback inmediato
+        this.saveStatus = 'Datos restaurados.';
         setTimeout(() => (this.saveStatus = ''), 2000);
       }
     },
@@ -90,7 +86,7 @@ const app = Vue.createApp({
               CVDataStore.getDefaultData(),
               importedData
             );
-            this.saveStatus = 'Datos importados y guardados.'; // Feedback
+            this.saveStatus = 'Datos importados y guardados.';
             setTimeout(() => (this.saveStatus = ''), 3000);
           }
         } catch (error) {
@@ -106,27 +102,21 @@ const app = Vue.createApp({
   watch: {
     cvData: {
       handler(newData, oldData) {
-        // Evitar el spam de "Guardando..." en la carga inicial si oldData no está definido
         if (oldData && Object.keys(oldData).length > 0) {
           this.saveStatus = 'Guardando...';
           CVDataStore.save(newData);
-          // Usamos un debounce improvisado para el mensaje "Guardado"
-          // Si hay múltiples cambios rápidos, solo el último mostrará "Guardado"
           if (this.saveTimeout) {
             clearTimeout(this.saveTimeout);
           }
           this.saveTimeout = setTimeout(() => {
             this.saveStatus = 'Guardado ✓';
             setTimeout(() => {
-              // Solo limpiar si sigue siendo "Guardado ✓" (para no sobreescribir "Guardando...")
               if (this.saveStatus === 'Guardado ✓') {
                 this.saveStatus = '';
               }
-            }, 2000); // Tiempo que se muestra "Guardado ✓"
-          }, 700); // Tiempo de espera antes de mostrar "Guardado ✓"
+            }, 2000);
+          }, 700);
         } else if (!oldData || Object.keys(oldData).length === 0) {
-          // Primera carga, simplemente guardar sin feedback de "Guardando..."
-          // o si es la primera vez que se setea cvData desde el load.
           CVDataStore.save(newData);
         }
       },
@@ -135,16 +125,16 @@ const app = Vue.createApp({
   },
   created() {
     this.applyInitialTheme();
-    this.saveTimeout = null; // Inicializar saveTimeout
-    // cvData ya se carga en la declaración de data, el watcher se encargará del primer guardado.
+    this.saveTimeout = null;
   },
 });
 
-// ... (registro de componentes y app.mount sin cambios)
 app.component('cv-controls', CvControls);
 app.component('cv-header', CvHeader);
 app.component('cv-professional-profile', CvProfessionalProfile);
 app.component('cv-section-list', CvSectionList);
 app.component('cv-social-links', CvSocialLinks);
+// Si creaste un componente CvFooter.js, regístralo aquí:
+// app.component('cv-footer', CvFooter);
 
 app.mount('#app');
