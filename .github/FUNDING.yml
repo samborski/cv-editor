@@ -1,0 +1,13 @@
+# .github/FUNDING.yml
+
+# Opción principal y más integrada
+github: [samborski]
+
+# Opción popular para donaciones tipo "cómprame un café"
+ko_fi: danielgsamborski # Asegúrate de que este sea tu nombre de usuario exacto en Ko-fi
+
+# Enlaces personalizados para opciones locales y directas
+custom: 
+  - https://www.paypal.me/danielgsamborski # Parece correcto
+  - https://mpago.li/2jRjibd # Link de Mercado Pago para $1500, parece correcto
+  - https://link.mercadopago.com.ar/dansam # CORREGIDO: Añadido https://
