@@ -1,10 +1,50 @@
 // js/components/CvSectionList.js
 const CvSectionList = {
-    // ... (props, emits, methods sin cambios)
-    props: ['title', 'items', 'editMode', 'itemStructureType'],
-    emits: ['update:items'],
-    methods: { /* ... */ },
-    template: `
+  props: ['title', 'items', 'editMode', 'itemStructureType'],
+  emits: ['update:items'],
+  methods: {
+    updateSimpleItem(index, value) {
+      const updatedItem = { ...this.items[index], text: value };
+      this.$emit('update:items', [
+        ...this.items.slice(0, index),
+        updatedItem,
+        ...this.items.slice(index + 1),
+      ]);
+    },
+    updateItem(index, key, value) {
+      const updatedItem = { ...this.items[index], [key]: value };
+      this.$emit('update:items', [
+        ...this.items.slice(0, index),
+        updatedItem,
+        ...this.items.slice(index + 1),
+      ]);
+    },
+    removeItem(index) {
+      this.$emit(
+        'update:items',
+        this.items.filter((_, i) => i !== index)
+      );
+    },
+    addItem() {
+      const newItem = {};
+
+      if (this.itemStructureType === 'simple') {
+        newItem.text = '';
+      } else if (this.itemStructureType === 'education') {
+        newItem.title = '';
+        newItem.institution = '';
+        newItem.details = '';
+      } else if (this.itemStructureType === 'experience') {
+        newItem.title = '';
+        newItem.role = '';
+        newItem.description = '';
+      }
+
+      newItem.id = Utils.generateId(); // Generar un ID único para el nuevo elemento
+      this.$emit('update:items', [...this.items, newItem]);
+    },
+  },
+  template: `
         <div>
             <h2 class="text-primary dark:text-dark-primary text-xl font-bold my-4">{{ title }}</h2>
             <ul class="space-y-4 mb-6">
@@ -80,5 +120,5 @@ const CvSectionList = {
                 </li>
             </ul>
         </div>
-    `
+    `,
 };
