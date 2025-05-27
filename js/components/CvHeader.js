@@ -1,76 +1,76 @@
 // js/components/CvHeader.js
 const CvHeader = {
-  props: ['cvData', 'editMode'],
-  emits: ['set-edit-mode'],
-  data() {
-    return {
-      emailError: '',
-      websiteUrlError: '',
-      // No necesitamos componentId si usamos IDs estáticos y el componente es único
-    };
-  },
-  watch: {
-    'cvData.email'(newEmail) {
-      if (
-        this.editMode &&
-        newEmail &&
-        newEmail.trim() !== '' &&
-        !Utils.isValidEmail(newEmail)
-      ) {
-        this.emailError = 'Formato de email inválido.';
-      } else {
-        this.emailError = '';
-      }
-    },
-    'cvData.websiteUrl'(newUrl) {
-      if (
-        this.editMode &&
-        newUrl &&
-        newUrl.trim() !== '' &&
-        !Utils.isValidUrl(newUrl)
-      ) {
-        this.websiteUrlError = 'Formato de URL inválido.';
-      } else {
-        this.websiteUrlError = '';
-      }
-    },
-  },
-  methods: {
-    clearField(fieldName) {
-      if (this.cvData.hasOwnProperty(fieldName)) {
-        this.cvData[fieldName] = '';
-        if (fieldName === 'email') this.emailError = '';
-        if (fieldName === 'websiteUrl') this.websiteUrlError = '';
-        // No es necesario limpiar explícitamente websiteDisplay/Url si el otro se limpia,
-        // ya que v-model los mantendrá sincronizados con cvData.
-      }
-    },
-    triggerFileInput() {
-      if (this.$refs.profilePictureFile) {
-        this.$refs.profilePictureFile.click();
-      }
-    },
-    handleProfilePictureUpload(event) {
-      const file = event.target.files[0];
-      if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.cvData.profilePicture = e.target.result;
+    props: ["cvData", "editMode"],
+    emits: ["set-edit-mode"],
+    data() {
+        return {
+            emailError: "",
+            websiteUrlError: "",
+            // No necesitamos componentId si usamos IDs estáticos y el componente es único
         };
-        reader.readAsDataURL(file);
-      } else if (file) {
-        alert(
-          'Por favor, selecciona un archivo de imagen válido (ej: JPG, PNG, GIF). No se reemplazará la imagen predeterminada.'
-        );
-      }
-      event.target.value = null;
     },
-    requestEditMode() {
-      this.$emit('set-edit-mode', true);
+    watch: {
+        "cvData.email"(newEmail) {
+            if (
+                this.editMode &&
+                newEmail &&
+                newEmail.trim() !== "" &&
+                !Utils.isValidEmail(newEmail)
+            ) {
+                this.emailError = "Formato de email inválido.";
+            } else {
+                this.emailError = "";
+            }
+        },
+        "cvData.websiteUrl"(newUrl) {
+            if (
+                this.editMode &&
+                newUrl &&
+                newUrl.trim() !== "" &&
+                !Utils.isValidUrl(newUrl)
+            ) {
+                this.websiteUrlError = "Formato de URL inválido.";
+            } else {
+                this.websiteUrlError = "";
+            }
+        },
     },
-  },
-  template: `
-    <header class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white mt-16 print:mt-0">
+    methods: {
+        clearField(fieldName) {
+            if (this.cvData.hasOwnProperty(fieldName)) {
+                this.cvData[fieldName] = "";
+                if (fieldName === "email") this.emailError = "";
+                if (fieldName === "websiteUrl") this.websiteUrlError = "";
+                // No es necesario limpiar explícitamente websiteDisplay/Url si el otro se limpia,
+                // ya que v-model los mantendrá sincronizados con cvData.
+            }
+        },
+        triggerFileInput() {
+            if (this.$refs.profilePictureFile) {
+                this.$refs.profilePictureFile.click();
+            }
+        },
+        handleProfilePictureUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.cvData.profilePicture = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else if (file) {
+                alert(
+                    "Por favor, selecciona un archivo de imagen válido (ej: JPG, PNG, GIF). No se reemplazará la imagen predeterminada."
+                );
+            }
+            event.target.value = null;
+        },
+        requestEditMode() {
+            this.$emit("set-edit-mode", true);
+        },
+    },
+    template: `
+    <header class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white">
         <div class="flex-shrink-0 mb-5 md:mb-0 print:mb-0 md:mr-5 print:mr-5 text-center">
             <img v-if="cvData.profilePicture && cvData.profilePicture.trim() !== ''"
                  :src="cvData.profilePicture"
