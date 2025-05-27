@@ -1,5 +1,13 @@
 const pt = {
     title: "Currículo Dinâmico",
+    common: {
+        save: "Salvar",
+        cancel: "Cancelar",
+        add: "Adicionar",
+        delete: "Excluir",
+        edit: "Editar",
+        view: "Visualizar",
+    },
     nav: {
         edit: "Editar",
         view: "Visualizar",
@@ -22,8 +30,15 @@ const pt = {
         toggleTheme: "Alternar tema claro/escuro",
         exportData: "Exportar Dados (JSON)",
         importData: "Importar Dados (JSON)",
+        selectLang: "Selecionar idioma",
     },
     header: {
+        photo: {
+            upload: "Selecionar arquivo",
+            clear: "Remover foto",
+            help: "Cole uma URL ou selecione um arquivo de imagem",
+            altText: "Foto do perfil",
+        },
         placeholders: {
             name: "Nome completo",
             email: "seu.email@exemplo.com",
@@ -32,6 +47,10 @@ const pt = {
             address: "Endereço, Cidade",
             birthdate: "DD/MM/AAAA",
         },
+        errors: {
+            invalidEmail: "Formato de email inválido",
+            invalidUrl: "Formato de URL inválido",
+        },
     },
     sections: {
         profile: "Perfil Profissional",
@@ -39,12 +58,6 @@ const pt = {
         experience: "Experiência Profissional",
         skills: "Habilidades Técnicas",
         availability: "Disponibilidade",
-    },
-    buttons: {
-        add: "Adicionar",
-        delete: "Excluir",
-        save: "Salvar",
-        cancel: "Cancelar",
     },
     share: {
         title: "Compartilhe meu Perfil!",

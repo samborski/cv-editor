@@ -1,5 +1,13 @@
 const en = {
     title: "Dynamic Resume",
+    common: {
+        save: "Save",
+        cancel: "Cancel",
+        add: "Add",
+        delete: "Delete",
+        edit: "Edit",
+        view: "View",
+    },
     nav: {
         edit: "Edit",
         view: "View",
@@ -22,8 +30,15 @@ const en = {
         toggleTheme: "Toggle light/dark theme",
         exportData: "Export Data (JSON)",
         importData: "Import Data (JSON)",
+        selectLang: "Select language",
     },
     header: {
+        photo: {
+            upload: "Select file",
+            clear: "Remove photo",
+            help: "Paste a URL or select an image file",
+            altText: "Profile photo",
+        },
         placeholders: {
             name: "Full name",
             email: "your.email@example.com",
@@ -32,6 +47,10 @@ const en = {
             address: "Address, City",
             birthdate: "MM DD, YYYY",
         },
+        errors: {
+            invalidEmail: "Invalid email format",
+            invalidUrl: "Invalid URL format",
+        },
     },
     sections: {
         profile: "Professional Profile",
@@ -39,12 +58,6 @@ const en = {
         experience: "Work Experience",
         skills: "Technical Skills",
         availability: "Availability",
-    },
-    buttons: {
-        add: "Add",
-        delete: "Delete",
-        save: "Save",
-        cancel: "Cancel",
     },
     share: {
         title: "Share my Profile!",

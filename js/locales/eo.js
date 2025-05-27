@@ -1,5 +1,13 @@
 const eo = {
     title: "Dinamika Karierresumo",
+    common: {
+        save: "Konservi",
+        cancel: "Nuligi",
+        add: "Aldoni",
+        delete: "Forigi",
+        edit: "Redakti",
+        view: "Rigardi",
+    },
     nav: {
         edit: "Redakti",
         view: "Rigardi",
@@ -22,8 +30,15 @@ const eo = {
         toggleTheme: "Baskuligi helan/malhelan etoson",
         exportData: "Eksporti Datumojn (JSON)",
         importData: "Importi Datumojn (JSON)",
+        selectLang: "Elekti lingvon",
     },
     header: {
+        photo: {
+            upload: "Elekti dosieron",
+            clear: "Forigi foton",
+            help: "Gluu URL-on aŭ elektu bildodosieron",
+            altText: "Profila foto",
+        },
         placeholders: {
             name: "Plena nomo",
             email: "via.retpoŝto@ekzemplo.com",
@@ -32,6 +47,10 @@ const eo = {
             address: "Adreso, Urbo",
             birthdate: "TT MM JJJJ",
         },
+        errors: {
+            invalidEmail: "Nevalida retpoŝta formato",
+            invalidUrl: "Nevalida URL-formato",
+        },
     },
     sections: {
         profile: "Profesia Profilo",
@@ -39,12 +58,6 @@ const eo = {
         experience: "Laborsperto",
         skills: "Teknikaj Kapabloj",
         availability: "Disponeblo",
-    },
-    buttons: {
-        add: "Aldoni",
-        delete: "Forigi",
-        save: "Konservi",
-        cancel: "Nuligi",
     },
     share: {
         title: "Diskonigi mian Profilon!",

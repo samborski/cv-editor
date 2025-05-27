@@ -6,7 +6,6 @@ const CvControls = {
             <div class="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
                 <select 
                     v-model="selectedLocale" 
-                    @change="changeLanguage($event.target.value)"
                     class="text-sm p-1 rounded bg-white dark:bg-gray-700 border dark:border-gray-600">
                     <option v-for="locale in availableLocales" 
                             :key="locale.code" 
@@ -19,10 +18,10 @@ const CvControls = {
                     <span v-if="saveStatus" 
                           class="text-xs px-2 transition-opacity duration-300"
                           :class="{
-                            'text-blue-600 dark:text-blue-400': saveStatus === 'Guardando...',
-                            'text-green-600 dark:text-green-400': saveStatus === 'Guardado' || 
-                                                                saveStatus.includes('importados') || 
-                                                                saveStatus.includes('restaurados'),
+                            'text-blue-600 dark:text-blue-400': saveStatus === t('controls.saving'),
+                            'text-green-600 dark:text-green-400': saveStatus === t('controls.saved') || 
+                                                                saveStatus.includes(t('controls.imported')) || 
+                                                                saveStatus.includes(t('controls.restored')),
                             'opacity-100': saveStatus,
                             'opacity-0': !saveStatus
                           }">
@@ -34,7 +33,7 @@ const CvControls = {
                     <button @click="$emit('toggleEdit')"
                         type="button"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-                        :title="editMode ? 'Ver CV' : 'Editar CV'">
+                        :title="editMode ? t('controls.view') : t('controls.edit')">
                         <i class="fa-solid" :class="editMode ? 'fa-eye' : 'fa-edit'"></i>
                     </button>
                     
@@ -42,7 +41,7 @@ const CvControls = {
                         <button @click="$emit('resetData')"
                             type="button"
                             class="p-2 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-700 rounded-full transition-colors"
-                            title="Restaurar datos por defecto">
+                            :title="t('controls.restore')">
                             <i class="fa-solid fa-undo"></i>
                         </button>
                     </template>
@@ -50,32 +49,32 @@ const CvControls = {
                     <button @click="triggerPrint"
                         type="button"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-                        title="Imprimir Currículum">
+                        :title="t('controls.print')">
                         <i class="fa-solid fa-print"></i>
                     </button>
                     
                     <button @click="downloadVCF"
                         type="button"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-                        title="Agregar a contactos (VCF)">
+                        :title="t('controls.addContact')">
                         <i class="fa-solid fa-address-card"></i>
                     </button>
                     
                     <button @click="$emit('toggleDarkMode')"
                         type="button"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors"
-                        title="Cambiar tema claro/oscuro">
+                        :title="t('controls.toggleTheme')">
                         <i class="fa-solid fa-circle-half-stroke"></i>
                     </button>
                     
                     <button @click="$emit('exportData')" 
-                        title="Exportar Datos (JSON)"
+                        :title="t('controls.exportData')"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors">
                         <i class="fa-solid fa-download"></i>
                     </button>
                     
                     <button @click="triggerImportClick" 
-                        title="Importar Datos (JSON)"
+                        :title="t('controls.importData')"
                         class="p-2 text-primary dark:text-dark-primary hover:bg-secondary dark:hover:bg-dark-secondary rounded-full transition-colors">
                         <i class="fa-solid fa-upload"></i>
                     </button>
@@ -104,7 +103,6 @@ const CvControls = {
     ],
     data() {
         return {
-            selectedLocale: "es",
             availableLocales: [
                 { code: "es", name: "Español" },
                 { code: "en", name: "English" },
@@ -114,14 +112,30 @@ const CvControls = {
             ],
         };
     },
+    computed: {
+        selectedLocale: {
+            get() {
+                return window.i18n?.getCurrentLocale() || "es";
+            },
+            set(value) {
+                this.changeLanguage(value);
+            },
+        },
+    },
     methods: {
+        t(key) {
+            return window.i18n?.t(key) || key;
+        },
         triggerPrint() {
             window.print();
         },
         changeLanguage(locale) {
-            this.selectedLocale = locale;
-            if (window.i18n && typeof window.i18n.setLocale === "function") {
+            if (window.i18n?.setLocale) {
                 window.i18n.setLocale(locale);
+                // Forzar actualización
+                this.$forceUpdate();
+                // Emitir evento para otros componentes
+                this.$root.$emit("localeChanged", locale);
             }
         },
         downloadVCF() {
@@ -165,9 +179,18 @@ const CvControls = {
         },
     },
     mounted() {
-        // Establecer el idioma inicial
-        if (window.i18n && typeof window.i18n.getCurrentLocale === "function") {
-            this.selectedLocale = window.i18n.getCurrentLocale();
+        // Inicializar idioma
+        const currentLocale = window.i18n?.getCurrentLocale();
+        if (currentLocale) {
+            this.changeLanguage(currentLocale);
         }
+
+        // Escuchar cambios globales de idioma
+        this.$root.$on("localeChanged", () => {
+            this.$forceUpdate();
+        });
+    },
+    beforeUnmount() {
+        this.$root.$off("localeChanged");
     },
 };

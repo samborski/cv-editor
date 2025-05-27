@@ -17,7 +17,7 @@ const CvHeader = {
                 newEmail.trim() !== "" &&
                 !Utils.isValidEmail(newEmail)
             ) {
-                this.emailError = "Formato de email inválido.";
+                this.emailError = this.t("header.errors.invalidEmail");
             } else {
                 this.emailError = "";
             }
@@ -29,13 +29,16 @@ const CvHeader = {
                 newUrl.trim() !== "" &&
                 !Utils.isValidUrl(newUrl)
             ) {
-                this.websiteUrlError = "Formato de URL inválido.";
+                this.websiteUrlError = this.t("header.errors.invalidUrl");
             } else {
                 this.websiteUrlError = "";
             }
         },
     },
     methods: {
+        t(key) {
+            return window.i18n?.t(key) || key;
+        },
         clearField(fieldName) {
             if (this.cvData.hasOwnProperty(fieldName)) {
                 this.cvData[fieldName] = "";
@@ -68,6 +71,15 @@ const CvHeader = {
         requestEditMode() {
             this.$emit("set-edit-mode", true);
         },
+    },
+    mounted() {
+        // Escuchar cambios de idioma
+        this.$root.$on("localeChanged", () => {
+            this.$forceUpdate();
+        });
+    },
+    beforeUnmount() {
+        this.$root.$off("localeChanged");
     },
     template: `
     <header class="flex flex-col md:flex-row print:flex-row items-center bg-secondary dark:bg-dark-secondary p-5 rounded-lg mb-2 print:mb-4 print:p-2 print:!bg-white">

@@ -1,5 +1,13 @@
 const fr = {
     title: "CV Dynamique",
+    common: {
+        save: "Enregistrer",
+        cancel: "Annuler",
+        add: "Ajouter",
+        delete: "Supprimer",
+        edit: "Éditer",
+        view: "Voir",
+    },
     nav: {
         edit: "Éditer",
         view: "Voir",
@@ -22,8 +30,15 @@ const fr = {
         toggleTheme: "Basculer thème clair/sombre",
         exportData: "Exporter les données (JSON)",
         importData: "Importer les données (JSON)",
+        selectLang: "Sélectionner la langue",
     },
     header: {
+        photo: {
+            upload: "Sélectionner un fichier",
+            clear: "Supprimer la photo",
+            help: "Collez une URL ou sélectionnez un fichier image",
+            altText: "Photo de profil",
+        },
         placeholders: {
             name: "Nom complet",
             email: "votre.email@exemple.com",
@@ -32,6 +47,10 @@ const fr = {
             address: "Adresse, Ville",
             birthdate: "JJ MM AAAA",
         },
+        errors: {
+            invalidEmail: "Format d'email invalide",
+            invalidUrl: "Format d'URL invalide",
+        },
     },
     sections: {
         profile: "Profil Professionnel",
@@ -39,12 +58,6 @@ const fr = {
         experience: "Expérience Professionnelle",
         skills: "Compétences Techniques",
         availability: "Disponibilité",
-    },
-    buttons: {
-        add: "Ajouter",
-        delete: "Supprimer",
-        save: "Enregistrer",
-        cancel: "Annuler",
     },
     share: {
         title: "Partagez mon profil !",
