@@ -35,10 +35,8 @@ const CvHeader = {
             }
         },
     },
+    mixins: [i18nMixin],
     methods: {
-        t(key) {
-            return window.i18n?.t(key) || key;
-        },
         clearField(fieldName) {
             if (this.cvData.hasOwnProperty(fieldName)) {
                 this.cvData[fieldName] = "";
@@ -62,9 +60,7 @@ const CvHeader = {
                 };
                 reader.readAsDataURL(file);
             } else if (file) {
-                alert(
-                    "Por favor, selecciona un archivo de imagen válido (ej: JPG, PNG, GIF). No se reemplazará la imagen predeterminada."
-                );
+                alert(this.t("header.photo.error"));
             }
             event.target.value = null;
         },
@@ -86,18 +82,18 @@ const CvHeader = {
         <div class="flex-shrink-0 mb-5 md:mb-0 print:mb-0 md:mr-5 print:mr-5 text-center">
             <img v-if="cvData.profilePicture && cvData.profilePicture.trim() !== ''"
                  :src="cvData.profilePicture"
-                 alt="Foto de perfil"
+                 :alt="t('header.photo.altText')"
                  class="w-32 h-32 max-w-[150px] min-w-[80px] print:w-28 rounded-full object-cover border-2 border-primary print:!border-black shadow mx-auto" />
             
             <div v-if="editMode" class="mt-2 space-y-2">
                 <div class="relative">
-                    <label for="cvHeaderProfilePictureInput" class="sr-only">URL de la foto de perfil</label>
-                    <input id="cvHeaderProfilePictureInput" type="text" v-model="cvData.profilePicture" placeholder="URL o selecciona archivo" class="edit-input pr-8 w-full">
+                    <label for="cvHeaderProfilePictureInput" class="sr-only">{{ t('header.labels.profilePicture') }}</label>
+                    <input id="cvHeaderProfilePictureInput" type="text" v-model="cvData.profilePicture" :placeholder="t('header.photo.urlPlaceholder')" class="edit-input pr-8 w-full">
                     <button v-if="cvData.profilePicture"
                        @click="clearField('profilePicture')"
                        type="button"
                        class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
-                       aria-label="Limpiar URL de foto de perfil">
+                       :aria-label="t('header.aria.clearProfilePicture')">
                        <i class="fa-solid fa-times-circle"></i>
                     </button>
                 </div>
@@ -105,11 +101,11 @@ const CvHeader = {
                     <input type="file" accept="image/*" @change="handleProfilePictureUpload" ref="profilePictureFile" class="hidden">
                     <button @click="triggerFileInput" type="button"
                             class="text-xs px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors">
-                        Seleccionar Archivo...
+                        {{ t('header.photo.selectFile') }}
                     </button>
                 </div>
                 <p v-if="!cvData.profilePicture && editMode" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Pega una URL o selecciona un archivo de imagen.
+                    {{ t('header.photo.help') }}
                 </p>
             </div>
         </div>
@@ -118,13 +114,13 @@ const CvHeader = {
             <h1 class="text-primary dark:text-dark-primary text-2xl md:text-3xl font-bold print:!text-black print:!mb-2">
                 <span v-if="!editMode" :class="{'field-hoverable': !editMode}" @click="requestEditMode">{{ cvData.name }}</span>
                 <div v-else class="relative">
-                    <label for="cvHeaderNameInput" class="sr-only">Nombre completo</label>
-                    <input id="cvHeaderNameInput" type="text" v-model="cvData.name" placeholder="Nombre completo" class="edit-input text-2xl md:text-3xl font-bold pr-10">
+                    <label for="cvHeaderNameInput" class="sr-only">{{ t('header.labels.name') }}</label>
+                    <input id="cvHeaderNameInput" type="text" v-model="cvData.name" :placeholder="t('header.placeholders.name')" class="edit-input text-2xl md:text-3xl font-bold pr-10">
                     <button v-if="cvData.name"
                        @click="clearField('name')"
                        type="button"
                        class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-base"
-                       aria-label="Limpiar nombre">
+                       :aria-label="t('header.aria.clearName')">
                        <i class="fa-solid fa-times-circle"></i>
                     </button>
                 </div>
@@ -137,9 +133,9 @@ const CvHeader = {
                 </template>
                 <template v-else>
                     <span class="relative inline-block">
-                        <label for="cvHeaderEmailInput" class="sr-only">Correo electrónico</label>
-                        <input id="cvHeaderEmailInput" type="email" v-model="cvData.email" placeholder="tu.correo@ejemplo.com" class="edit-input inline-block w-auto pr-8">
-                        <button v-if="cvData.email" @click="clearField('email')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" aria-label="Limpiar correo"><i class="fa-solid fa-times-circle"></i></button>
+                        <label for="cvHeaderEmailInput" class="sr-only">{{ t('header.labels.email') }}</label>
+                        <input id="cvHeaderEmailInput" type="email" v-model="cvData.email" :placeholder="t('header.placeholders.email')" class="edit-input inline-block w-auto pr-8">
+                        <button v-if="cvData.email" @click="clearField('email')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" :aria-label="t('header.aria.clearEmail')"><i class="fa-solid fa-times-circle"></i></button>
                     </span>
                     <span v-if="emailError" class="text-red-500 text-xs ml-2 block md:inline" role="alert">{{ emailError }}</span>
                 </template>
@@ -151,13 +147,13 @@ const CvHeader = {
                 </template>
                 <template v-else>
                     <span class="relative inline-block">
-                        <label for="cvHeaderPhoneInput" class="sr-only">Número de teléfono</label>
-                        <input id="cvHeaderPhoneInput" type="tel" v-model="cvData.phone" placeholder="+54 11 12345678" class="edit-input inline-block w-auto pr-8">
-                        <button v-if="cvData.phone" @click="clearField('phone')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" aria-label="Limpiar teléfono"><i class="fa-solid fa-times-circle"></i></button>
+                        <label for="cvHeaderPhoneInput" class="sr-only">{{ t('header.labels.phone') }}</label>
+                        <input id="cvHeaderPhoneInput" type="tel" v-model="cvData.phone" :placeholder="t('header.placeholders.phone')" class="edit-input inline-block w-auto pr-8">
+                        <button v-if="cvData.phone" @click="clearField('phone')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" :aria-label="t('header.aria.clearPhone')"><i class="fa-solid fa-times-circle"></i></button>
                     </span>
                 </template>
                 <a :href="'https://api.whatsapp.com/send?phone=' + (cvData.phone || '').replace(/\\s+/g, '')" target="_blank"
-                   class="text-primary dark:text-dark-primary hover:text-green-500 dark:hover:text-green-400 ml-2 print:hidden" title="WhatsApp">
+                   class="text-primary dark:text-dark-primary hover:text-green-500 dark:hover:text-green-400 ml-2 print:hidden" :title="t('common.whatsapp')">
                     <i class="fa-brands fa-whatsapp"></i>
                 </a>
             </p>
@@ -171,16 +167,16 @@ const CvHeader = {
                 </template>
                 <template v-else>
                     <span class="relative inline-block mr-1">
-                        <label for="cvHeaderWebsiteDisplayInput" class="sr-only">Texto a mostrar para el sitio web</label>
-                        <input id="cvHeaderWebsiteDisplayInput" type="text" v-model="cvData.websiteDisplay" placeholder="Ej: Mi Portafolio" class="edit-input inline-block w-auto pr-8">
-                        <button v-if="cvData.websiteDisplay" @click="clearField('websiteDisplay')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" aria-label="Limpiar texto del sitio web"><i class="fa-solid fa-times-circle"></i></button>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">Texto que se mostrará para el enlace.</span>
+                        <label for="cvHeaderWebsiteDisplayInput" class="sr-only">{{ t('header.labels.websiteDisplay') }}</label>
+                        <input id="cvHeaderWebsiteDisplayInput" type="text" v-model="cvData.websiteDisplay" :placeholder="t('header.placeholders.websiteDisplay')" class="edit-input inline-block w-auto pr-8">
+                        <button v-if="cvData.websiteDisplay" @click="clearField('websiteDisplay')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" :aria-label="t('header.aria.clearWebsiteText')"><i class="fa-solid fa-times-circle"></i></button>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('header.help.websiteDisplay') }}</span>
                     </span>
                     <span class="relative inline-block">
-                        <label for="cvHeaderWebsiteUrlInput" class="sr-only">URL del sitio web</label>
-                        <input id="cvHeaderWebsiteUrlInput" type="url" v-model="cvData.websiteUrl" placeholder="https://www.tusitio.com" class="edit-input inline-block w-auto pr-8">
-                        <button v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" aria-label="Limpiar URL del sitio web"><i class="fa-solid fa-times-circle"></i></button>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">URL completa de tu sitio web.</span>
+                        <label for="cvHeaderWebsiteUrlInput" class="sr-only">{{ t('header.labels.website') }}</label>
+                        <input id="cvHeaderWebsiteUrlInput" type="url" v-model="cvData.websiteUrl" :placeholder="t('header.placeholders.websiteUrl')" class="edit-input inline-block w-auto pr-8">
+                        <button v-if="cvData.websiteUrl" @click="clearField('websiteUrl')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-sm" :aria-label="t('header.aria.clearWebsite')"><i class="fa-solid fa-times-circle"></i></button>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('header.help.websiteUrl') }}</span>
                     </span>
                     <span v-if="websiteUrlError" class="text-red-500 text-xs ml-2 block" role="alert">{{ websiteUrlError }}</span>
                 </template>
@@ -190,9 +186,9 @@ const CvHeader = {
                 <i class="fa-solid fa-map-location-dot text-lightText dark:text-dark-lightText mr-2 print:!text-black" aria-hidden="true"></i>
                 <span v-if="!editMode" :class="{'field-hoverable': !editMode}" @click="requestEditMode">{{ cvData.address }}</span>
                 <span v-else class="relative block">
-                    <label for="cvHeaderAddressInput" class="sr-only">Dirección</label>
-                    <input id="cvHeaderAddressInput" type="text" v-model="cvData.address" placeholder="Calle Número, Ciudad, Provincia" class="edit-input pr-8">
-                    <button v-if="cvData.address" @click="clearField('address')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500" aria-label="Limpiar dirección"><i class="fa-solid fa-times-circle"></i></button>
+                    <label for="cvHeaderAddressInput" class="sr-only">{{ t('header.labels.address') }}</label>
+                    <input id="cvHeaderAddressInput" type="text" v-model="cvData.address" :placeholder="t('header.placeholders.address')" class="edit-input pr-8">
+                    <button v-if="cvData.address" @click="clearField('address')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500" :aria-label="t('header.aria.clearAddress')"><i class="fa-solid fa-times-circle"></i></button>
                 </span>
             </p>
 
@@ -200,10 +196,10 @@ const CvHeader = {
                 <i class="fa-solid fa-cake-candles text-lightText dark:text-dark-lightText mr-2 print:!text-black" aria-hidden="true"></i>
                 <span v-if="!editMode" :class="{'field-hoverable': !editMode}" @click="requestEditMode">{{ cvData.birthdate }}</span>
                  <span v-else class="relative block">
-                    <label for="cvHeaderBirthdateInput" class="sr-only">Fecha de nacimiento</label>
-                    <input id="cvHeaderBirthdateInput" type="text" v-model="cvData.birthdate" placeholder="DD de Mes de AAAA (ej: 18 de enero de 1973)" class="edit-input pr-8">
-                    <button v-if="cvData.birthdate" @click="clearField('birthdate')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500" aria-label="Limpiar fecha de nacimiento"><i class="fa-solid fa-times-circle"></i></button>
-                    <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">Este formato se usa para el VCF.</span>
+                    <label for="cvHeaderBirthdateInput" class="sr-only">{{ t('header.labels.birthdate') }}</label>
+                    <input id="cvHeaderBirthdateInput" type="text" v-model="cvData.birthdate" :placeholder="t('header.placeholders.birthdate')" class="edit-input pr-8">
+                    <button v-if="cvData.birthdate" @click="clearField('birthdate')" type="button" class="icon-button absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500" :aria-label="t('header.aria.clearBirthdate')"><i class="fa-solid fa-times-circle"></i></button>
+                    <span class="block text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('header.help.birthdate') }}</span>
                 </span>
             </p>
         </div>

@@ -4,15 +4,28 @@ const CvControls = {
     template: `
         <nav class="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 print:hidden z-50">
             <div class="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
-                <select 
-                    v-model="selectedLocale" 
-                    class="text-sm p-1 rounded bg-white dark:bg-gray-700 border dark:border-gray-600">
-                    <option v-for="locale in availableLocales" 
-                            :key="locale.code" 
-                            :value="locale.code">
-                        {{ locale.name }}
-                    </option>
-                </select>
+                <div class="flex items-center gap-1">
+                    <button
+                        v-for="locale in availableLocales"
+                        :key="locale.code"
+                        @click="handleLanguageChange(locale.code)"
+                        :class="[
+                            'p-2 pb-3 transition-all duration-200 text-2xl relative group',
+                            currentLocale === locale.code 
+                                ? 'scale-110' 
+                                : 'hover:scale-105'
+                        ]"
+                        :title="locale.name"
+                    >
+                        <span class="transform transition-transform">{{ getLocaleIcon(locale.code) }}</span>
+                        <div :class="[
+                            'absolute bottom-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 transition-all duration-200',
+                            currentLocale === locale.code
+                                ? 'bg-primary dark:bg-dark-primary scale-100'
+                                : 'bg-primary/0 dark:bg-dark-primary/0 scale-0 group-hover:bg-primary/50 dark:group-hover:bg-dark-primary/50 group-hover:scale-100'
+                        ]"></div>
+                    </button>
+                </div>
 
                 <div class="flex-1 text-center">
                     <span v-if="saveStatus" 
@@ -89,6 +102,7 @@ const CvControls = {
             />
         </nav>
     `,
+    mixins: [i18nMixin],
     props: {
         editMode: Boolean,
         cvDataForVcf: Object,
@@ -103,40 +117,61 @@ const CvControls = {
     ],
     data() {
         return {
+            currentLocale: localStorage.getItem("locale") || window.i18n?.getCurrentLocale() || "es",
             availableLocales: [
                 { code: "es", name: "Español" },
                 { code: "en", name: "English" },
                 { code: "fr", name: "Français" },
                 { code: "pt", name: "Português" },
                 { code: "eo", name: "Esperanto" },
-            ],
+            ]
         };
-    },
-    computed: {
-        selectedLocale: {
-            get() {
-                return window.i18n?.getCurrentLocale() || "es";
-            },
-            set(value) {
-                this.changeLanguage(value);
-            },
-        },
     },
     methods: {
         t(key) {
             return window.i18n?.t(key) || key;
         },
+        getLocaleIcon(code) {
+            const icons = {
+                es: "🇪🇸",
+                en: "🇺🇸",
+                fr: "🇫🇷",
+                pt: "🇧🇷",
+                eo: "🌎",
+            };
+            return icons[code] || "🏳️";
+        },        async handleLanguageChange(newLocale) {
+            if (newLocale === this.currentLocale) return;
+            
+            try {
+                // Actualizar el estado local
+                this.currentLocale = newLocale;
+                localStorage.setItem("locale", newLocale);
+                
+                // Cambiar el idioma globalmente
+                if (window.i18n?.setLocale) {
+                    await window.i18n.setLocale(newLocale);
+                    
+                    // Emitir el evento al componente padre
+                    this.$emit("locale-changed", newLocale);
+                    
+                    // Notificar a otros componentes a través del bus de eventos global
+                    this.$root.$emit("localeChanged", newLocale);
+                    
+                    // Forzar la actualización de la vista
+                    this.$nextTick(() => {
+                        this.$forceUpdate();
+                        if (this.$root.$forceUpdate) {
+                            this.$root.$forceUpdate();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error al cambiar el idioma:", error);
+            }
+        },
         triggerPrint() {
             window.print();
-        },
-        changeLanguage(locale) {
-            if (window.i18n?.setLocale) {
-                window.i18n.setLocale(locale);
-                // Forzar actualización
-                this.$forceUpdate();
-                // Emitir evento para otros componentes
-                this.$root.$emit("localeChanged", locale);
-            }
         },
         downloadVCF() {
             if (!this.cvDataForVcf) {
@@ -178,19 +213,20 @@ const CvControls = {
             }
         },
     },
-    mounted() {
-        // Inicializar idioma
-        const currentLocale = window.i18n?.getCurrentLocale();
-        if (currentLocale) {
-            this.changeLanguage(currentLocale);
-        }
-
+    created() {
         // Escuchar cambios globales de idioma
-        this.$root.$on("localeChanged", () => {
+        this.$root.$on("localeChanged", (locale) => {
+            this.currentLocale = locale;
             this.$forceUpdate();
         });
     },
-    beforeUnmount() {
+    mounted() {
+        // Inicializar el idioma al cargar el componente
+        if (this.currentLocale && window.i18n?.setLocale) {
+            window.i18n.setLocale(this.currentLocale);
+        }
+    },
+    beforeDestroy() {
         this.$root.$off("localeChanged");
     },
 };
