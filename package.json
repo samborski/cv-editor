@@ -1,0 +1,24 @@
+{
+    "name": "cv-editor",
+    "version": "1.0.0",
+    "description": "¡Hola! Este es un editor de currículum vitae web que te permite crear y personalizar tu CV de manera sencilla e intuitiva.",
+    "main": "index.js",
+    "scripts": {
+        "build": "rm -rf dist && mkdir dist && copyfiles -u 1 src/**/* dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/samborski/cv-editor.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/samborski/cv-editor/issues"
+    },
+    "homepage": "https://github.com/samborski/cv-editor#readme",
+    "devDependencies": {
+        "copyfiles": "^2.4.1"
+    }
+}
